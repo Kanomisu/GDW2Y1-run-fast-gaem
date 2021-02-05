@@ -6,6 +6,8 @@
 int playerX = 0;
 int playerY = 0;
 int playerRef;
+int hookRef;
+b2Vec2 activeProjDir;
 
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
@@ -19,7 +21,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 }
 
 
-int PhysicsPlayground::shootHook(float directionAngle)
+int PhysicsPlayground::shootHook(float projAngle)
 {
 	auto entity = ECS::CreateEntity();
 	//Add components
@@ -55,16 +57,16 @@ int PhysicsPlayground::shootHook(float directionAngle)
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f);
 
 
-	tempPhsBody.SetRotationAngleDeg(directionAngle);
+	tempPhsBody.SetRotationAngleDeg(projAngle);
 	tempPhsBody.SetGravityScale(0.f);
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
-	//activeProj = entity;
+	
 	float projSpeedMult = 10;
-	//activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, sin(directionAngle * PI / 180) * projSpeedMult);
-
+	activeProjDir = b2Vec2(cos(projAngle * PI / 180) * projSpeedMult, sin(projAngle * PI / 180) * projSpeedMult);
+	hookRef = entity;
 	return entity;
 }
 
@@ -447,6 +449,13 @@ void PhysicsPlayground::Update()
 {
 	playerX = ECS::GetComponent<Transform>(playerRef).GetPositionX();
 	playerY = ECS::GetComponent<Transform>(playerRef).GetPositionY();
+
+
+	if (hookRef != NULL)
+	{
+		ECS::GetComponent<PhysicsBody>(hookRef).SetPosition(ECS::GetComponent<PhysicsBody>(hookRef).GetPosition() + (activeProjDir));
+	}
+	
 }
 
 void PhysicsPlayground::GUI()
@@ -675,6 +684,11 @@ void PhysicsPlayground::KeyboardHold()
 	if (Input::GetKey(Key::D))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
+	}
+
+	if (Input::GetKey(Key::Q))
+	{
+		shootHook(0);
 	}
 
 	//Change physics body size for circle
