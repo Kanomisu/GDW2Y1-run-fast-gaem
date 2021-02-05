@@ -78,15 +78,20 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 
 }
+*/
+
+void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body)
+{
+	m_transform = transform;
+	m_hasPhysics = hasPhys;
+	if (hasPhys)
+	{
+		m_physBody = body;
+	}
+}
 
 void Player::Update()
 {
-	if (!m_locked)
-	{
-		MovementUpdate();
-	}
-
-	AnimationUpdate();
 }
 
 void Player::MovementUpdate()

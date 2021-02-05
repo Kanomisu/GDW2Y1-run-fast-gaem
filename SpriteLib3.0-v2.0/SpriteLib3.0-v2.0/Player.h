@@ -67,8 +67,11 @@ public:
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
-	void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
-		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+	//void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
+	//	Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+	
+	//Alternative Init when no animations are implemented
+	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
 	void Update();
 	void MovementUpdate();

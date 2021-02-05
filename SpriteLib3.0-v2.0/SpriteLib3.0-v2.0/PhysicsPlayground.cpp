@@ -30,8 +30,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Setup MainCamera Entity
 	{
-		/*Scene::CreateCamera(m_sceneReg, vec4(-75.f, 75.f, -75.f, 75.f), -100.f, 100.f, windowWidth, windowHeight, true, true);*/
-
 		//Creates Camera entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainCamera(entity, true);
@@ -51,28 +49,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
-	//Setup new Entity
+	//Test to showcase create sprite function. Delete once demoed.
+	/*
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "HelloWorld.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
+		Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));
 	}
+	*/
 	
-	//Link entity
+	//Player entity
 	{
-		/*Scene::CreatePhysicsSprite(m_sceneReg, "LinkStandby", 80, 60, 1.f, vec3(0.f, 30.f, 2.f), b2_dynamicBody, 0.f, 0.f, true, true)*/
-
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainPlayer(entity, true);
 
@@ -384,12 +369,43 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+*/
 }
+
 
 void PhysicsPlayground::Update()
 {
 	
 }
+
+void PhysicsPlayground::KeyboardHold()
+{
+}
+
+void PhysicsPlayground::KeyboardDown()
+{
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
+
+	if (Input::GetKeyDown(Key::T))
+	{
+		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
+	}
+	if (canJump.m_canJump)
+	{
+		if (Input::GetKeyDown(Key::Space))
+		{
+			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
+			canJump.m_canJump = false;
+		}
+	}
+}
+
+void PhysicsPlayground::KeyboardUp()
+{
+}
+
+
 
 void PhysicsPlayground::GUI()
 {
@@ -416,7 +432,7 @@ void PhysicsPlayground::GUIWindowUI()
 	{
 		m_secondWindow = !m_secondWindow;
 	}
-	
+
 	ImGui::End();
 }
 
@@ -522,7 +538,7 @@ void PhysicsPlayground::GUIWindowOne()
 	}
 
 	ImGui::Separator();
-	
+
 	ImGui::Text("Editing World Variables!");
 	if (ImGui::SliderFloat2("World Gravity", gravity, -1000.f, 1000.f, "%.2f"))
 	{
@@ -543,7 +559,7 @@ void PhysicsPlayground::GUIWindowOne()
 	ImGui::Image((void*)(intptr_t)TextureManager::FindTexture(imageLoad)->GetID(), ImVec2(150.f, 150.f), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::Separator();
-	
+
 	ImGui::Text("Editing Colors");
 	ImGui::ColorPicker4("Scene Background Color", &m_clearColor.x);
 
@@ -566,7 +582,7 @@ void PhysicsPlayground::GUIWindowTwo()
 	{
 		ImGui::Text("You are within Tab 1");
 
-		if (ImGui::ImageButton((void*)(intptr_t)TextureManager::FindTexture(imageLoad1)->GetID(), ImVec2(100.f, 100.f), ImVec2(0,1), ImVec2(1,0)))
+		if (ImGui::ImageButton((void*)(intptr_t)TextureManager::FindTexture(imageLoad1)->GetID(), ImVec2(100.f, 100.f), ImVec2(0, 1), ImVec2(1, 0)))
 		{
 			hahaPressed = "You shouldn't have pressed that...";
 		}
@@ -589,68 +605,8 @@ void PhysicsPlayground::GUIWindowTwo()
 
 		ImGui::EndTabItem();
 	}
-	
+
 	ImGui::EndTabBar();
 
 	ImGui::End();
-}
-
-
-
-
-void PhysicsPlayground::KeyboardHold()
-{
-	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-
-	float speed = 1.f;
-	b2Vec2 vel = b2Vec2(0.f, 0.f);
-
-	if (Input::GetKey(Key::Shift))
-	{
-		speed *= 5.f;
-	}
-
-	if (Input::GetKey(Key::A))
-	{
-		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
-	}
-	if (Input::GetKey(Key::D))
-	{
-		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
-	}
-
-	//Change physics body size for circle
-	if (Input::GetKey(Key::O))
-	{
-		player.ScaleBody(1.3 * Timer::deltaTime, 0);
-	}
-	else if (Input::GetKey(Key::I))
-	{
-		player.ScaleBody(-1.3 * Timer::deltaTime, 0);
-	}
-}
-
-void PhysicsPlayground::KeyboardDown()
-{
-	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
-
-	if (Input::GetKeyDown(Key::T))
-	{
-		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
-	}
-	if (canJump.m_canJump)
-	{
-		if (Input::GetKeyDown(Key::Space))
-		{
-			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
-			canJump.m_canJump = false;
-		}
-	}
-}
-
-void PhysicsPlayground::KeyboardUp()
-{
-	
-
 }
