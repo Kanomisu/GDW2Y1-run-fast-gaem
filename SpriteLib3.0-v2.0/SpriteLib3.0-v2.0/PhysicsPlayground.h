@@ -19,13 +19,20 @@ public:
 	void GUIWindowOne();
 	void GUIWindowTwo();
 
+	//Mouse control thing
+	void MouseLocation(vec2 mousePos);
 
 	//Input overrides
 	void KeyboardHold() override;
 	void KeyboardDown() override;
 	void KeyboardUp() override;
+	void MouseMotion(SDL_MouseButtonEvent event);
+	void MousePress(SDL_MouseButtonEvent event);
 
 protected:
+	//Mouse pos
+	vec2 m_mousePos = vec2(0.f, 0.f);
+
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
 

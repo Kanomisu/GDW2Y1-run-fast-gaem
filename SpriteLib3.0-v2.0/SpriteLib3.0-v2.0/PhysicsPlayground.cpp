@@ -388,7 +388,29 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	
+	MouseLocation(m_mousePos);
+}
+
+void PhysicsPlayground::MouseLocation(vec2 mousePos)
+{
+	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
+
+	vec2 mouseGL = mousePos; //converted world space mouse to GL space mouse
+
+	float dx = playerPos.x - mouseGL.x;
+	float dy = playerPos.y - mouseGL.y;
+
+	std::cout << "X: " << dx << "\tY: " << dy << "\n";
+}
+
+
+void PhysicsPlayground::MouseMotion(SDL_MouseButtonEvent event)
+{
+	m_mousePos = Util::ConvertToGL(m_sceneReg, vec2(float(event.x), float(event.y)));
+}
+
+void PhysicsPlayground::MousePress(SDL_MouseButtonEvent event)
+{
 }
 
 void PhysicsPlayground::GUI()
@@ -594,9 +616,6 @@ void PhysicsPlayground::GUIWindowTwo()
 
 	ImGui::End();
 }
-
-
-
 
 void PhysicsPlayground::KeyboardHold()
 {
