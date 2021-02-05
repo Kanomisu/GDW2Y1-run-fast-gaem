@@ -25,6 +25,8 @@ public:
 	void KeyboardDown() override;
 	void KeyboardUp() override;
 
+	int shootHook(float = 0.0);
+
 protected:
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

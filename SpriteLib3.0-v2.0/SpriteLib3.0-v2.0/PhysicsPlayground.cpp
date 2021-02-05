@@ -3,6 +3,11 @@
 
 #include <random>
 
+int playerX = 0;
+int playerY = 0;
+int playerRef;
+
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -11,6 +16,56 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
+}
+
+
+int PhysicsPlayground::shootHook(float directionAngle)
+{
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up the components
+	std::string fileName = "BeachBall.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10)); 
+
+	// To implement: 
+	//ECS::GetComponent<Trigger*>(entity) = new grappleHookTrigger;
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_dynamicBody;
+	tempDef.position.Set(float32(playerX), float32(playerY));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f);
+
+
+	tempPhsBody.SetRotationAngleDeg(directionAngle);
+	tempPhsBody.SetGravityScale(0.f);
+
+	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
+	//activeProj = entity;
+	float projSpeedMult = 10;
+	//activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, sin(directionAngle * PI / 180) * projSpeedMult);
+
+	return entity;
 }
 
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
@@ -110,6 +165,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
+
+		playerRef = entity; //Hold mainplayer entity as a global reference for use elsewhere
 	}
 
 	//Setup static Top Platform
@@ -388,7 +445,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	
+	playerX = ECS::GetComponent<Transform>(playerRef).GetPositionX();
+	playerY = ECS::GetComponent<Transform>(playerRef).GetPositionY();
 }
 
 void PhysicsPlayground::GUI()
