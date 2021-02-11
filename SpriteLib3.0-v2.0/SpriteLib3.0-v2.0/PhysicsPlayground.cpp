@@ -401,10 +401,11 @@ void PhysicsPlayground::MouseLocation(vec2 mousePos)
 	float dy = playerPos.y - mouseGL.y;
 
 	std::cout << "X: " << dx << "\tY: " << dy << "\n";
+
 }
 
 
-void PhysicsPlayground::MouseMotion(SDL_MouseButtonEvent event)
+void PhysicsPlayground::MouseMotion(SDL_MouseMotionEvent event)
 {
 	m_mousePos = Util::ConvertToGL(m_sceneReg, vec2(float(event.x), float(event.y)));
 }

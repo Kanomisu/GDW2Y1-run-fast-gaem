@@ -26,7 +26,7 @@ public:
 	void KeyboardHold() override;
 	void KeyboardDown() override;
 	void KeyboardUp() override;
-	void MouseMotion(SDL_MouseButtonEvent event);
+	void MouseMotion(SDL_MouseMotionEvent event);
 	void MousePress(SDL_MouseButtonEvent event);
 
 protected:
