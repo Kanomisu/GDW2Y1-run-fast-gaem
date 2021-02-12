@@ -67,8 +67,11 @@ public:
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
-	void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
-		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+	//void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
+	//	Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+	
+	//Alternative Init when no animations are implemented
+	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 
 	void Update();
 	void MovementUpdate();
@@ -90,6 +93,8 @@ private:
 	AnimationController* m_animController = nullptr;
 	//A reference to our player transform
 	Transform* m_transform = nullptr;
+	//A refernce to the player's "CanJump" Component
+	CanJump* m_canJump = nullptr;
 
 	//Physics importance
 	//A reference to our physics body

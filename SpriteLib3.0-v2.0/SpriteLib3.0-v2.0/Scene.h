@@ -70,6 +70,9 @@ public:
 	//Physics world
 	b2World& GetPhysicsWorld();
 
+	//Spawns a sprite entity
+	void CreateSprite(entt::registry* scene, std::string sprite, int width, int height, float transparency, vec3 position);
+
 	//Set window size (makes sure the camera aspect is proper)
 	void SetWindowSize(float windowWidth, float windowHeight);
 protected:
