@@ -176,6 +176,21 @@ b2World & Scene::GetPhysicsWorld()
 	return *m_physicsWorld;
 }
 
+void Scene::CreateSprite(entt::registry* scene, std::string sprite, int width, int height, float transparency, vec3 position)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Set up the components
+	ECS::GetComponent<Sprite>(entity).LoadSprite(sprite, width, height);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(transparency);
+	ECS::GetComponent<Transform>(entity).SetPosition(position);
+}
+
 void Scene::SetWindowSize(float windowWidth, float windowHeight)
 {
 	//TODO: Find new way to get the main camera

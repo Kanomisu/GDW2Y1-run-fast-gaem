@@ -64,8 +64,8 @@ void AnimationSpritePlayground::InitScene(float windowWidth, float windowHeight)
 		//Set up components
 		std::string fileName = "spritesheets/Link.png";
 		std::string animations = "linkAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 20, 30, &ECS::GetComponent<Sprite>(entity), 
-														&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
+		//ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 20, 30, &ECS::GetComponent<Sprite>(entity), 
+		//												&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 2.f));
 	}
 
