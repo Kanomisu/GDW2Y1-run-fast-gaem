@@ -10,9 +10,11 @@ int hookRef;
 b2Vec2 activeProjDir;
 
 
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
+	
 	//No gravity this is a top down scene
 	m_gravity = b2Vec2(0.f, -98.f);
 	m_physicsWorld->SetGravity(m_gravity);
@@ -21,54 +23,8 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 }
 
 
-int PhysicsPlayground::shootHook(float projAngle)
-{
-	auto entity = ECS::CreateEntity();
-	//Add components
-	ECS::AttachComponent<Sprite>(entity);
-	ECS::AttachComponent<Transform>(entity);
-	ECS::AttachComponent<PhysicsBody>(entity);
-	ECS::AttachComponent<Trigger*>(entity);
 
 
-	//Sets up the components
-	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
-	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10)); 
-
-	// To implement: 
-	//ECS::GetComponent<Trigger*>(entity) = new grappleHookTrigger;
-
-	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-	float shrinkX = 0.f;
-	float shrinkY = 0.f;
-
-	b2Body* tempBody;
-	b2BodyDef tempDef;
-	tempDef.type = b2_dynamicBody;
-	tempDef.position.Set(float32(playerX), float32(playerY));
-
-	tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f);
-
-
-	tempPhsBody.SetRotationAngleDeg(projAngle);
-	tempPhsBody.SetGravityScale(0.f);
-
-	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
-	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
-
-	
-	float projSpeedMult = 10;
-	activeProjDir = b2Vec2(cos(projAngle * PI / 180) * projSpeedMult, sin(projAngle * PI / 180) * projSpeedMult);
-	hookRef = entity;
-	return entity;
-}
 
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
@@ -414,7 +370,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
 
-		ECS::GetComponent<Player>(entity).InitPlayer(&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
+		ECS::GetComponent<Player>(entity).InitPlayer(&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity), m_physicsWorld);
+		playerRef = entity;
 	}
 	
 
@@ -426,6 +383,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 void PhysicsPlayground::Update()
 {
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+	
 }
 
 void PhysicsPlayground::KeyboardHold()
@@ -449,6 +407,11 @@ void PhysicsPlayground::KeyboardDown()
 			canJump.m_canJump = false;
 		}
 	}
+	if (Input::GetKeyDown(Key::T))
+	{
+		ECS::GetComponent<Player>(MainEntities::MainPlayer()).ShootHook();
+	}
+	
 }
 
 void PhysicsPlayground::KeyboardUp()

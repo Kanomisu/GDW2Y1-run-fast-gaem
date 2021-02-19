@@ -4,8 +4,9 @@
 #include "PhysicsPlaygroundListener.h"
 #include <string>
 
-class PhysicsPlayground : public Scene
+class PhysicsPlayground : public Scene 
 {
+	
 public:
 	PhysicsPlayground(std::string name);
 

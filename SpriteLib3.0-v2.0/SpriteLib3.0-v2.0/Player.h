@@ -71,11 +71,12 @@ public:
 	//	Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 	
 	//Alternative Init when no animations are implemented
-	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
+	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr, b2World* = nullptr);
 
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
+	int ShootHook(double = 0.0);
 
 private:
 	void SetActiveAnimation(int anim);
@@ -95,6 +96,8 @@ private:
 	Transform* m_transform = nullptr;
 	//A refernce to the player's "CanJump" Component
 	CanJump* m_canJump = nullptr;
+
+	b2World* m_physicsWorld = nullptr;
 
 	//Physics importance
 	//A reference to our physics body

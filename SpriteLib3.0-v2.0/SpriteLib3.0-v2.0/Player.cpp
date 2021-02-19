@@ -4,13 +4,13 @@ Player::Player()
 {
 }
 
-Player::Player(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite, 
-					AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body)
+Player::Player(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite,
+	AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body)
 {
 	//InitPlayer(fileName, animationJSON, width, height, sprite, controller, transform, hasPhys, body);
 }
 /*
-void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite, 
+void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite,
 							AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body)
 {
 	//Store references to the components
@@ -35,7 +35,7 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	nlohmann::json animations = File::LoadJSON(animationJSON);
 
 	//IDLE ANIMATIONS\\
-	
+
 	//Idle Left
 	m_animController->AddAnimation(animations["IdleLeft"].get<Animation>());
 	//Idle Right
@@ -80,15 +80,17 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 }
 */
 
-void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump)
+void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump, b2World* physWorld)
 {
 	m_transform = transform;
 	m_hasPhysics = hasPhys;
+	
 	if (hasPhys)
 	{
 		m_physBody = body;
 	}
 	m_canJump = jump;
+	m_physicsWorld = physWorld;
 }
 
 void Player::Update()
@@ -116,7 +118,7 @@ void Player::MovementUpdate()
 			m_physBody->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(slideImpulse, 0), true);
 		}
 	}
-	else {			
+	else {
 		if (Input::GetKey(Key::A))
 		{
 			vel = vel + vec3(-1.f, 0.f, 0.f);
@@ -170,3 +172,52 @@ void Player::SetActiveAnimation(int anim)
 {
 	m_animController->SetActiveAnim(anim);
 }
+
+int Player::ShootHook(double projAngle)
+{
+	
+	float playerX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
+	float playerY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up the components
+	std::string fileName = "BeachBall.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
+
+	// To implement: 
+	//ECS::GetComponent<Trigger*>(entity) = new grappleHookTrigger;
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_dynamicBody;
+	tempDef.position.Set(float32(playerX), float32(playerY));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f);
+
+
+	tempPhsBody.SetRotationAngleDeg(projAngle);
+	tempPhsBody.SetGravityScale(0.f);
+
+	float projSpeedMult = 10;
+	b2Vec2 activeProjDir = b2Vec2(cos(projAngle * PI / 180) * projSpeedMult, sin(projAngle * PI / 180) * projSpeedMult);
+	return entity;
+
+}
+
