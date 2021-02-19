@@ -178,12 +178,14 @@ int Player::ShootHook(double projAngle)
 	
 	float playerX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
 	float playerY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
+
 	auto entity = ECS::CreateEntity();
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
 	ECS::AttachComponent<Transform>(entity);
 	ECS::AttachComponent<PhysicsBody>(entity);
-	ECS::AttachComponent<Trigger*>(entity);
+	// To implement: 
+	//ECS::AttachComponent<GrappleTrigger>(entity);
 
 
 	//Sets up the components
@@ -192,8 +194,7 @@ int Player::ShootHook(double projAngle)
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
 
-	// To implement: 
-	//ECS::GetComponent<Trigger*>(entity) = new grappleHookTrigger;
+	
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -214,6 +215,9 @@ int Player::ShootHook(double projAngle)
 
 	tempPhsBody.SetRotationAngleDeg(projAngle);
 	tempPhsBody.SetGravityScale(0.f);
+
+	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
 	float projSpeedMult = 10;
 	b2Vec2 activeProjDir = b2Vec2(cos(projAngle * PI / 180) * projSpeedMult, sin(projAngle * PI / 180) * projSpeedMult);

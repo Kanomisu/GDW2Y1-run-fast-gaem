@@ -382,7 +382,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+	//ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 	
 }
 
@@ -407,7 +407,7 @@ void PhysicsPlayground::KeyboardDown()
 			canJump.m_canJump = false;
 		}
 	}
-	if (Input::GetKeyDown(Key::T))
+	if (Input::GetKeyDown(Key::H))
 	{
 		ECS::GetComponent<Player>(MainEntities::MainPlayer()).ShootHook();
 	}
