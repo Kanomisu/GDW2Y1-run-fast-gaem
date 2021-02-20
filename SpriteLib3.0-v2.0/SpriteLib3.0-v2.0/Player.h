@@ -76,7 +76,7 @@ public:
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
-	int ShootHook(double = 0.0);
+	
 
 private:
 	void SetActiveAnimation(int anim);
