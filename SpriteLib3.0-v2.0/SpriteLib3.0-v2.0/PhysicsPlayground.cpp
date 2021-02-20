@@ -1,5 +1,6 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
+#include "Hook.h"
 
 #include <random>
 
@@ -39,7 +40,7 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	ECS::AttachComponent<Sprite>(entity);
 	ECS::AttachComponent<Transform>(entity);
 	ECS::AttachComponent<PhysicsBody>(entity);
-	//ECS::AttachComponent<Hook>(entity); Why isnt this working, 
+	//ECS::AttachComponent<Hook>(entity);  Go back and implement triggers the way below does it with pointers instead.
 
 	// To implement: 
 	//ECS::AttachComponent<GrappleTrigger>(entity);
@@ -50,7 +51,8 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
-
+	//ECS::GetComponent<Hook>(entity).PassEntity(entity); //needed so hook can control the linear velocity of the projectile.
+	//ECS::GetComponent<Hook>(entity).SetTriggerEntity(entity);
 
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -67,7 +69,7 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f); //change to true later
 
 
 	tempPhsBody.SetRotationAngleDeg(rotationDeg);
@@ -249,7 +251,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON | TRIGGER);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 		tempPhsBody.SetPosition(b2Vec2(267.f, 5.f));
@@ -283,7 +285,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON | TRIGGER);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 	}
