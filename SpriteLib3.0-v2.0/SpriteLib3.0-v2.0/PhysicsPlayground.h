@@ -26,9 +26,29 @@ public:
 	void KeyboardDown() override;
 	void KeyboardUp() override;
 
-	int shootHook(float = 0.0);
+	int ShootHook(float rotationDeg);
 
+	
+	void queueHook(float rotationDeg = 0.0)
+	{
+		m_hookQueued = true;
+		m_hookRotation = rotationDeg;
+	}
+	void queueHookCheck()
+	{
+		if (m_hookQueued)
+		{
+			ShootHook(m_hookRotation);
+			m_hookQueued = false;
+		}
+	}
 protected:
+
+	bool m_hookQueued = false;
+	float m_hookRotation = 0.0;
+
+
+
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
 
