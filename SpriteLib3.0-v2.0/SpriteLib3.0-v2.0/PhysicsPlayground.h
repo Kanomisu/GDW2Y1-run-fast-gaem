@@ -27,6 +27,7 @@ public:
 	void KeyboardUp() override;
 
 	int ShootHook(float rotationDeg);
+	
 
 	
 	void queueHook(float rotationDeg = 0.0)
@@ -42,12 +43,31 @@ public:
 			m_hookQueued = false;
 		}
 	}
-protected:
 
+	void queueDeleteHook()
+	{
+		m_hookDeleteQueued = true;
+	}
+
+	void queueDeleteHookCheck()
+	{
+		if (m_hookDeleteQueued)
+		{
+			if (activeHook != NULL)
+			{
+				PhysicsBody::m_bodiesToDelete.push_back(activeHook);
+				activeHook = NULL;
+			}
+			m_hookDeleteQueued = false;
+		}
+	}
+protected:
+	bool m_hookDeleteQueued = false;
 	bool m_hookQueued = false;
 	float m_hookRotation = 0.0;
 
-
+	int playerRef;
+	int activeHook = NULL;
 
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
