@@ -93,44 +93,67 @@ void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, C
 
 void Player::Update()
 {
+	PlayerSpeedLevel();
 	MovementUpdate();
+
 	//AnimationUpdate();
 }
 
 void Player::MovementUpdate()
 {
+	//Set up Vars
 	m_moving = false;
-	float speed = 10.f;
-	vec3 vel = vec3(0.f, 0.f, 0.f);
-	float slideImpulse = 3000000000.f;
-	float airSpeedMultiplier = 0.4f;
+	float vel = 0.f;
+	float slideImpulse = 300.f;
+	float airSpeedMultiplier = 1.f; //TODO Make it so you can adjust your air speed only slightly
+	float friction = 0.8f;
 
+
+	//Checks if grounded and resets some stuff
 	if (m_canJump->m_canJump) {
 		airSpeedMultiplier = 1.f;
 	}
-	if (Input::GetKeyDown(Key::LeftControl) && m_canJump->m_canJump) {
-		if (m_facing == LEFT) {
-			m_physBody->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-slideImpulse, 0), true);
+	if (!m_locked) //Checks if the player should be able to control their character
+	{
+		if (Input::GetKeyDown(Key::LeftControl) && m_canJump->m_canDash)
+		{
+			m_locked = true;
+			m_canJump->m_canDash = false;
+			m_dashing = true;
+			m_dashTimeDelta = m_dashTime;
+			std::cout << "Dashing" << std::endl;
 		}
+		else
+		{
+			if (Input::GetKey(Key::A))
+			{
+				vel = vel - 1.f;
+				m_facing = LEFT;
+				m_moving = true;
+			}
+			if (Input::GetKey(Key::D))
+			{
+				vel = vel + 1.f;
+				m_facing = RIGHT;
+				m_moving = true;
+			}
+		}
+		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y, m_physBody->GetVelocity().z));
+	}
+	if (m_dashing) {
 		if (m_facing == RIGHT) {
-			m_physBody->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(slideImpulse, 0), true);
+			m_physBody->SetVelocity(vec3(m_dashSpeed, 0, 0));
+		}
+		else {
+			m_physBody->SetVelocity(vec3(-m_dashSpeed, 0, 0));
+		}
+		m_dashTimeDelta -= Timer::deltaTime;
+		if (m_dashTimeDelta < 0) {
+			m_dashing = false;
+			m_locked = false;
+			//m_canJump->m_canJump = true; //TODO Add ability to jump out of air dash (extra jump)
 		}
 	}
-	else {			
-		if (Input::GetKey(Key::A))
-		{
-			vel = vel + vec3(-1.f, 0.f, 0.f);
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			vel = vel + vec3(1.f, 0.f, 0.f);
-			m_facing = RIGHT;
-			m_moving = true;
-		}
-	}
-	m_physBody->SetVelocity(vel * speed * airSpeedMultiplier + m_physBody->GetVelocity());
 }
 
 void Player::AnimationUpdate()
@@ -164,6 +187,43 @@ void Player::AnimationUpdate()
 	}
 
 	SetActiveAnimation(activeAnimation + (int)m_facing);
+}
+
+void Player::PlayerSpeedLevel()
+{
+	//int level = 1;
+	if (Input::GetKeyDown(Key::U)) {
+		m_playerSpeed = 10.f;
+		std::cout << "Key Pressed" << std::endl;
+	}
+	if (Input::GetKeyDown(Key::I)) {
+		m_playerSpeed = 20.f;
+		std::cout << "Key Pressed" << std::endl;
+	}
+	if (Input::GetKeyDown(Key::O)) {
+		m_playerSpeed = 40.f;
+		std::cout << "Key Pressed" << std::endl;
+	}
+	if (Input::GetKeyDown(Key::P)) {
+		m_playerSpeed = 80.f;
+		std::cout << "Key Pressed" << std::endl;
+	}
+
+	//In Case this doesn't feel good, we can specify the player speed here.
+	/*
+	m_playerSpeed = 10 * 2 ^ (level - 1);
+	switch (level) {
+	case 1:
+		m_playerSpeed = 10.f;
+		break;
+	case 2:
+		m_playerSpeed = 20.f;
+		break;
+	case 3:
+		m_playerSpeed = 40.f;
+		break;
+	}
+	*/
 }
 
 void Player::SetActiveAnimation(int anim)

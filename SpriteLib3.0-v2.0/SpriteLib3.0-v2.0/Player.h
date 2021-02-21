@@ -76,6 +76,7 @@ public:
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
+	void PlayerSpeedLevel();
 
 private:
 	void SetActiveAnimation(int anim);
@@ -86,6 +87,18 @@ private:
 	bool m_attacking = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+	bool m_dashing = false;
+	//For setting how long the player is in the dash.
+	float m_dashTime = 0.25f;
+	//For keeping track of how long a dash is
+	float m_dashTimeDelta = 0.f;
+	//How fast the player moved while dashing
+	float m_dashSpeed = 100.f;
+
+
+	//Player's speed.
+	float m_playerSpeed = 10.f;
+	//Player's previous momentum
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;
@@ -95,6 +108,7 @@ private:
 	Transform* m_transform = nullptr;
 	//A refernce to the player's "CanJump" Component
 	CanJump* m_canJump = nullptr;
+
 
 	//Physics importance
 	//A reference to our physics body

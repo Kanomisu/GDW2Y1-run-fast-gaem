@@ -37,10 +37,12 @@ void PhysicsPlaygroundListener::BeginContact(b2Contact* contact)
 		if (filterA.categoryBits == PLAYER)
 		{
 			ECS::GetComponent<CanJump>((int)fixtureA->GetBody()->GetUserData()).m_canJump = true;
+			ECS::GetComponent<CanJump>((int)fixtureA->GetBody()->GetUserData()).m_canDash = true;
 		}
 		else if (filterB.categoryBits == PLAYER)
 		{
 			ECS::GetComponent<CanJump>((int)fixtureB->GetBody()->GetUserData()).m_canJump = true;
+			ECS::GetComponent<CanJump>((int)fixtureB->GetBody()->GetUserData()).m_canDash = true;
 		}
 	}
 
