@@ -5,13 +5,13 @@ Player::Player()
 }
 
 Player::Player(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite, 
-					AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body)
+					AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump)
 {
-	//InitPlayer(fileName, animationJSON, width, height, sprite, controller, transform, hasPhys, body);
+	InitPlayer(fileName, animationJSON, width, height, sprite, controller, transform, hasPhys, body, jump);
 }
-/*
+
 void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, Sprite* sprite, 
-							AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body)
+							AnimationController* controller, Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump)
 {
 	//Store references to the components
 	m_sprite = sprite;
@@ -22,7 +22,7 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	{
 		m_physBody = body;
 	}
-
+	m_canJump = jump;
 	//Initialize UVs
 	m_animController->InitUVs(fileName);
 
@@ -61,7 +61,8 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 #endif
 
 	//Attack Animations\\
-
+	
+	/*
 	//AttackLeft
 	m_animController->AddAnimation(animations["AttackLeft"].get<Animation>());
 	//AttackRight
@@ -72,13 +73,13 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	//AttackDown
 	m_animController->AddAnimation(animations["AttackDown"].get<Animation>());
 #endif
-
+	*/
 	//Set Default Animation
 	m_animController->SetActiveAnim(IDLELEFT);
 
 
 }
-*/
+
 
 void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump)
 {
@@ -96,7 +97,7 @@ void Player::Update()
 	PlayerSpeedLevel();
 	MovementUpdate();
 
-	//AnimationUpdate();
+	AnimationUpdate();
 }
 
 void Player::MovementUpdate()
@@ -162,8 +163,39 @@ void Player::AnimationUpdate()
 
 	if (m_moving)
 	{
-		//Puts it into the WALK category
-		activeAnimation = WALK;
+		/*
+		if (m_jumping) {
+			activeAnimation = JUMP;
+			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+			{
+				//will autoset to idle
+				m_locked = false;
+				m_jumping = false;
+				//Resets jump animation
+				m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+				activeAnimation = IDLE;
+			}
+		}
+		else {
+		*/
+			activeAnimation = WALK;
+		//}
+			//Take these comments out when we get the jump anims
+	}
+	else if (m_jumping)
+	{
+		activeAnimation = JUMP;
+
+		//check if anim is done
+		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+		{
+			//will autoset to idle
+			m_locked = false;
+			m_jumping = false;
+			//Resets jumo animation
+			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+			activeAnimation = IDLE;
+		}
 	}
 	else if (m_attacking)
 	{
@@ -180,6 +212,7 @@ void Player::AnimationUpdate()
 
 			activeAnimation = IDLE;
 		}
+
 	}
 	else
 	{

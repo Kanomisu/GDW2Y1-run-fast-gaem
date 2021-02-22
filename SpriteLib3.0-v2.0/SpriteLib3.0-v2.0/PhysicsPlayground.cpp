@@ -23,9 +23,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
-
+	/*
 	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
 	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	*/
 	
 
 	//Setup MainCamera Entity
@@ -327,13 +328,18 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<CanJump>(entity);
 		ECS::AttachComponent<Player>(entity);
 
 		//Sets up the components
-		std::string fileName = "LinkStandby.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
+		std::string fileName = "spritesheets/charSpritesheet.png";
+		std::string animations = "charAnimations.json";
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 32, 32, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
+			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
+
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
 
@@ -357,14 +363,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
 
-		ECS::GetComponent<Player>(entity).InitPlayer(&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
+		
+		//ECS::GetComponent<Player>(entity).InitPlayer(&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
 	}
 	
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 }
-
+ 
 
 void PhysicsPlayground::Update()
 {
