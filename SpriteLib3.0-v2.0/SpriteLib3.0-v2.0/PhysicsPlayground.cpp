@@ -443,7 +443,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	//ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+
+
 	//If the hook is in its "in flight" state, update its movement
 	
 	//ECS::GetComponent<Hook>(activeHook).Update();
