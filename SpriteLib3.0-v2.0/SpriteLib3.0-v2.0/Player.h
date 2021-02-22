@@ -3,7 +3,7 @@
 
 #include "BackEnd.h"
 
-#define TOPDOWN
+//#define TOPDOWN
 
 enum AnimEnums
 {
@@ -28,6 +28,8 @@ enum AnimEnums
 	ATTACKLEFT,
 	ATTACKRIGHT,
 
+	JUMPLEFT,
+	JUMPRIGHT,
 	//Only in Top down
 #ifdef TOPDOWN
 	ATTACKUP,
@@ -45,7 +47,9 @@ enum AnimTypes
 #ifndef TOPDOWN
 	IDLE = 0,
 	WALK = 2,
-	ATTACK = 4
+	ATTACK = 4,
+	JUMP = 6
+
 #endif
 };
 
@@ -65,10 +69,10 @@ class Player
 public:
 	Player();
 	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
-		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 
-	//void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
-	//	Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
+	void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
+		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 	
 	//Alternative Init when no animations are implemented
 	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
@@ -76,6 +80,7 @@ public:
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
+	void PlayerSpeedLevel();
 
 private:
 	void SetActiveAnimation(int anim);
@@ -84,8 +89,22 @@ private:
 	bool m_moving = false;
 	//Are you currently attacking?????
 	bool m_attacking = false;
+	//Are you currently jumping?????
+	bool m_jumping = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+	bool m_dashing = false;
+	//For setting how long the player is in the dash.
+	float m_dashTime = 0.25f;
+	//For keeping track of how long a dash is
+	float m_dashTimeDelta = 0.f;
+	//How fast the player moved while dashing
+	float m_dashSpeed = 100.f;
+
+
+	//Player's speed.
+	float m_playerSpeed = 10.f;
+	//Player's previous momentum
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;
@@ -96,6 +115,7 @@ private:
 	//A refernce to the player's "CanJump" Component
 	CanJump* m_canJump = nullptr;
 
+
 	//Physics importance
 	//A reference to our physics body
 	PhysicsBody* m_physBody = nullptr;
@@ -103,7 +123,7 @@ private:
 	bool m_hasPhysics = false;
 
 	//Default animation direction (feel free to change this to suit your game. If you're making a side-scroller, left or right would be better
-	AnimDir m_facing = LEFT;
+	AnimDir m_facing = RIGHT;
 };
 
 #endif // !__PLAYER_H__
