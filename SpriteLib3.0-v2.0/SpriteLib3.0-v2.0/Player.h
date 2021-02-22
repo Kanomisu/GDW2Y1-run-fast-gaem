@@ -79,10 +79,9 @@ public:
 
 	void reattachBody()
 	{
-		m_physBody = &ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-
 		ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 		ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+		m_physBody = &ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	}
 	
 
