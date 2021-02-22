@@ -75,13 +75,15 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	tempPhsBody.SetRotationAngleDeg(rotationDeg);
 	tempPhsBody.SetGravityScale(0.f);
 
-	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
-	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
 	float projSpeedMult = 10;
 	activeProjDir = b2Vec2(cos(rotationDeg * PI / 180) * projSpeedMult, sin(rotationDeg * PI / 180) * projSpeedMult);
 	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(activeProjDir);
 	activeHook = entity; // ref for later use
+
+
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody();
+
 	return entity;
 }
 

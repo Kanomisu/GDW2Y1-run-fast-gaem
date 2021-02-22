@@ -104,7 +104,7 @@ void Player::MovementUpdate()
 	m_moving = false;
 	float speed = 10.f;
 	vec3 vel = vec3(0.f, 0.f, 0.f);
-	float slideImpulse = 3000000000.f;
+	float slideImpulse = 300.f;
 	float airSpeedMultiplier = 0.4f;
 
 	if (m_canJump->m_canJump) {
