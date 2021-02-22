@@ -82,7 +82,7 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	activeHook = entity; // ref for later use
 
 
-	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody();
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
 
 	return entity;
 }
