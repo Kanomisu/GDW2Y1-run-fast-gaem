@@ -15,6 +15,8 @@ public:
 	Background(std::string& fileName, int width, int height, Sprite* sprite, Transform* transform);
 	void InitBackground(std::string& fileName, int width, int height, Sprite* sprite, Transform* transform);
 	void update();
+	void attachTransform(Transform* transform);
+	void attachSprite(Sprite* sprite);
 
 };
 

@@ -23,3 +23,13 @@ void Background::update()
     m_transform->SetPosition(vec3(Cam.GetPosition().x, Cam.GetPosition().y, 1.f));
 
 }
+
+void Background::attachTransform(Transform* transform)
+{
+    m_transform = transform;
+}
+
+void Background::attachSprite(Sprite* sprite)
+{
+    m_sprite = sprite;
+}

@@ -40,7 +40,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		vec4 temp = vec4(-80.f, 80.f, -80.f, 80.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -66,7 +66,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x, Cam.GetPosition().y, 1.f));
 
-		ECS::GetComponent<Background>(entity).InitBackground(fileName, 600, 400, &ECS::GetComponent<Sprite>(entity),
+		ECS::GetComponent<Background>(entity).InitBackground(fileName, 360, 240, &ECS::GetComponent<Sprite>(entity),
 			&ECS::GetComponent<Transform>(entity));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		background = entity;
@@ -356,7 +356,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up the components
 		std::string fileName = "spritesheets/charSpritesheet.png";
 		std::string animations = "charAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 32, 32, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 35, 35, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
 			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
 
 		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
@@ -390,6 +390,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
+	ECS::GetComponent<Background>(background).attachTransform(&ECS::GetComponent<Transform>(background));
+	ECS::GetComponent<Background>(background).attachSprite(&ECS::GetComponent<Sprite>(background));
+
 }
  
 
