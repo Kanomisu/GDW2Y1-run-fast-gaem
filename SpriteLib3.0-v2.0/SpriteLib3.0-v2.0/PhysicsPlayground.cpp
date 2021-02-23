@@ -50,7 +50,27 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 	
-	
+	//Setup the background
+	{
+		//Creates entity 
+
+		auto entity = ECS::CreateEntity();
+		auto& Cam = ECS::GetComponent<Camera>(MainEntities::MainCamera());
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<Background>(entity);
+
+		//Sets up the components
+		std::string fileName = "Background.png";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x, Cam.GetPosition().y, 1.f));
+
+		ECS::GetComponent<Background>(entity).InitBackground(fileName, 600, 400, &ECS::GetComponent<Sprite>(entity),
+			&ECS::GetComponent<Transform>(entity));
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		background = entity;
+	}
 
 	//Setup static Top Platform
 	{
@@ -375,7 +395,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
+	ECS::GetComponent<Background>(background).update();
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+
+
 }
 
 void PhysicsPlayground::KeyboardHold()

@@ -33,6 +33,8 @@ protected:
 
 	PhysicsPlaygroundListener listener;
 
+	int background = 1;
+
 	int puzzleWall1;
 	int puzzleWall2;
 };
