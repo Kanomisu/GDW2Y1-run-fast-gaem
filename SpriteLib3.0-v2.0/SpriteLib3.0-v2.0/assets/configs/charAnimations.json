@@ -42,5 +42,43 @@
     "NumFrames": 8,
     "Repeating": true,
     "SecsPerFrame": 0.10000001192092896
+  },
+  "JumpLeft": {
+    "Frame0": [ 2048.0, 128.0, 2176.0, 0.0 ],
+    "Frame1": [ 2176.0, 128.0, 2304.0, 0.0 ],
+    "NumFrames": 2,
+    "Repeating": false,
+    "SecsPerFrame": 0.10000001192092896
+  },
+  "JumpRight": {
+    "Frame0": [ 2304.0, 128.0, 2432.0, 0.0 ],
+    "Frame1": [ 2432.0, 128.0, 2560.0, 0.0 ],
+    "NumFrames": 2,
+    "Repeating": false,
+    "SecsPerFrame": 0.10000001192092896
+  },
+  "SlideLeft": {
+    "Frame0": [ 2560.0, 128.0, 2688.0, 0.0 ],
+    "NumFrames": 1,
+    "Repeating": true,
+    "SecsPerFrame": 0.30000001192092896
+  },
+  "SlideRight": {
+    "Frame0": [ 2688.0, 128.0, 2816.0, 0.0 ],
+    "NumFrames": 1,
+    "Repeating": true,
+    "SecsPerFrame": 0.30000001192092896
+  },
+  "DashRight": {
+    "Frame0": [ 2816.0, 128.0, 2944.0, 0.0 ],
+    "NumFrames": 1,
+    "Repeating": true,
+    "SecsPerFrame": 0.30000001192092896
+  },
+  "DashLeft": {
+    "Frame0": [ 2944.0, 128.0, 3072.0, 0.0 ],
+    "NumFrames": 1,
+    "Repeating": true,
+    "SecsPerFrame": 0.30000001192092896
   }
- }
+}

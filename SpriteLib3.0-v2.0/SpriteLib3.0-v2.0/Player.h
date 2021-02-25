@@ -30,6 +30,9 @@ enum AnimEnums
 
 	JUMPLEFT,
 	JUMPRIGHT,
+
+	DASHLEFT,
+	DASHRIGHT,
 	//Only in Top down
 #ifdef TOPDOWN
 	ATTACKUP,
@@ -47,9 +50,9 @@ enum AnimTypes
 #ifndef TOPDOWN
 	IDLE = 0,
 	WALK = 2,
-	ATTACK = 4,
-	JUMP = 6
-
+	DASH = 4,
+	JUMP = 6,
+	ATTACK = 8
 #endif
 };
 

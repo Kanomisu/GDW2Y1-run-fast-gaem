@@ -60,6 +60,22 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	m_animController->AddAnimation(animations["WalkDown"].get<Animation>());
 #endif
 
+
+
+	//Dash Animations\\
+
+	//DashLeft
+	m_animController->AddAnimation(animations["DashLeft"].get<Animation>());
+	//DashRight
+	m_animController->AddAnimation(animations["DashRight"].get<Animation>());
+
+
+	//Jump Animations\\
+
+	//WalkLeft
+	m_animController->AddAnimation(animations["JumpLeft"].get<Animation>());
+	//WalkRight
+	m_animController->AddAnimation(animations["JumpRight"].get<Animation>());
 	//Attack Animations\\
 	
 	/*
@@ -75,7 +91,7 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 #endif
 	*/
 	//Set Default Animation
-	m_animController->SetActiveAnim(IDLELEFT);
+	m_animController->SetActiveAnim(IDLERIGHT);
 
 
 }
@@ -138,6 +154,12 @@ void Player::MovementUpdate()
 				m_facing = RIGHT;
 				m_moving = true;
 			}
+
+			if (Input::GetKey(Key::Space))
+			{
+				m_jumping = true;
+				m_locked = true;
+			}
 		}
 		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y, m_physBody->GetVelocity().z));
 	}
@@ -163,7 +185,6 @@ void Player::AnimationUpdate()
 
 	if (m_moving)
 	{
-		/*
 		if (m_jumping) {
 			activeAnimation = JUMP;
 			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
@@ -173,14 +194,27 @@ void Player::AnimationUpdate()
 				m_jumping = false;
 				//Resets jump animation
 				m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
-				activeAnimation = IDLE;
+				activeAnimation = WALK;
 			}
 		}
+		if (m_dashing) {
+			activeAnimation = DASH;
+			if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+			{
+				//will autoset to idle
+				m_locked = false;
+				//m_dashing = false;
+				//Resets jump animation
+				//m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+				activeAnimation = WALK;
+			}
+
+			
+		}
 		else {
-		*/
+		
 			activeAnimation = WALK;
-		//}
-			//Take these comments out when we get the jump anims
+		}
 	}
 	else if (m_jumping)
 	{
@@ -200,6 +234,23 @@ void Player::AnimationUpdate()
 	else if (m_attacking)
 	{
 		activeAnimation = ATTACK;
+
+		//Check if the attack animation is done
+		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
+		{
+			//Will auto set to idle
+			m_locked = false;
+			m_attacking = false;
+			//Resets the attack animation
+			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
+
+			activeAnimation = IDLE;
+		}
+
+	}
+	else if (m_dashing)
+	{
+		activeAnimation = DASH;
 
 		//Check if the attack animation is done
 		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())

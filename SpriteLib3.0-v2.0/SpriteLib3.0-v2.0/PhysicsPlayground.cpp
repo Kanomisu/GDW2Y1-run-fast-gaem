@@ -40,7 +40,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		vec4 temp = vec4(-80.f, 80.f, -80.f, 80.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -50,7 +50,27 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 	
-	
+	//Setup the background
+	{
+		//Creates entity 
+
+		auto entity = ECS::CreateEntity();
+		auto& Cam = ECS::GetComponent<Camera>(MainEntities::MainCamera());
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<Background>(entity);
+
+		//Sets up the components
+		std::string fileName = "Background.png";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x, Cam.GetPosition().y, 1.f));
+
+		ECS::GetComponent<Background>(entity).InitBackground(fileName, 360, 240, &ECS::GetComponent<Sprite>(entity),
+			&ECS::GetComponent<Transform>(entity));
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		background = entity;
+	}
 
 	//Setup static Top Platform
 	{
@@ -334,9 +354,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Player>(entity);
 
 		//Sets up the components
-		std::string fileName = "spritesheets/charSpritesheet.png";
+		std::string fileName = "spritesheets/CharSpritesheet.png";
 		std::string animations = "charAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 32, 32, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 35, 35, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
 			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
 
 		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
@@ -370,12 +390,19 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
+	ECS::GetComponent<Background>(background).attachTransform(&ECS::GetComponent<Transform>(background));
+	ECS::GetComponent<Background>(background).attachSprite(&ECS::GetComponent<Sprite>(background));
+
 }
  
 
 void PhysicsPlayground::Update()
 {
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+	ECS::GetComponent<Background>(background).update();
+
+
 }
 
 void PhysicsPlayground::KeyboardHold()
@@ -395,7 +422,7 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		if (Input::GetKeyDown(Key::Space))
 		{
-			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
+			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 300000.f), true);
 			canJump.m_canJump = false;
 		}
 	}
