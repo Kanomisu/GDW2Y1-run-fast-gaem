@@ -354,7 +354,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Player>(entity);
 
 		//Sets up the components
-		std::string fileName = "spritesheets/charSpritesheet.png";
+		std::string fileName = "spritesheets/CharSpritesheet.png";
 		std::string animations = "charAnimations.json";
 		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 35, 35, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
 			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
@@ -399,8 +399,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	ECS::GetComponent<Background>(background).update();
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+	ECS::GetComponent<Background>(background).update();
 
 
 }
@@ -422,7 +422,7 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		if (Input::GetKeyDown(Key::Space))
 		{
-			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
+			player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 300000.f), true);
 			canJump.m_canJump = false;
 		}
 	}
