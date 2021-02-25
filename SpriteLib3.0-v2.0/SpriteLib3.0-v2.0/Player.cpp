@@ -107,7 +107,7 @@ void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, C
 		m_physBody = body;
 	}
 	m_canJump = jump;
-	m_physicsWorld = physWorld;
+	
 }
 
 void Player::Update()
