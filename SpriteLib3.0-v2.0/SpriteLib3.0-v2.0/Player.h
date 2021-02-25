@@ -78,12 +78,20 @@ public:
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 	
 	//Alternative Init when no animations are implemented
-	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
+	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr, b2World* = nullptr);
 
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
 	void PlayerSpeedLevel();
+
+	void reattachBody()
+	{
+		ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+		ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+		m_physBody = &ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	}
+	
 
 private:
 	void SetActiveAnimation(int anim);

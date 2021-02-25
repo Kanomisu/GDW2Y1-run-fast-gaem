@@ -35,8 +35,10 @@ void Game::InitGame()
 
 	//Creates a new scene.
 	//Replace this with your own scene.
+	PhysicsPlayground *p =  new PhysicsPlayground("Run fast game");
+	p->GetPhysicsWorld();
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
-	m_scenes.push_back(new PhysicsPlayground("PHYSICS PLAYGROUND TIEM!!!"));
+	m_scenes.push_back(p);
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
 	 
 	//Sets active scene reference to our scene
@@ -51,6 +53,8 @@ void Game::InitGame()
 
 	PhysicsSystem::Init();
 }
+
+
 
 bool Game::Run()
 {

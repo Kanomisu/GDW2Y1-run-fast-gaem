@@ -152,7 +152,9 @@
     <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GrainEffect.h" />
+    <ClInclude Include="GrappleHook.h" />
     <ClInclude Include="GreyscaleEffect.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="HorizontalScroll.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
@@ -213,7 +215,9 @@
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GrainEffect.cpp" />
+    <ClCompile Include="GrappleHook.cpp" />
     <ClCompile Include="GreyscaleEffect.cpp" />
+    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="HorizontalScroll.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />

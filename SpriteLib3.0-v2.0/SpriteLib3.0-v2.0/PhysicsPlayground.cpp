@@ -1,17 +1,93 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
+#include "Hook.h"
 
 #include <random>
+
+int playerX = 0;
+int playerY = 0;
+
+b2Vec2 activeProjDir;
+
+
+
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
+	
 	//No gravity this is a top down scene
 	m_gravity = b2Vec2(0.f, -98.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
+	
 }
+
+
+int PhysicsPlayground::ShootHook(float rotationDeg)
+{
+	//kill pre existing hook
+	if (activeHook != NULL)
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(activeHook);
+	}
+	float playerX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
+	float playerY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
+
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	//ECS::AttachComponent<Hook>(entity);  Go back and implement triggers the way below does it with pointers instead.
+
+	// To implement: 
+	//ECS::AttachComponent<GrappleTrigger>(entity);
+
+
+	//Sets up the components
+	std::string fileName = "BeachBall.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
+	//ECS::GetComponent<Hook>(entity).PassEntity(entity); //needed so hook can control the linear velocity of the projectile.
+	//ECS::GetComponent<Hook>(entity).SetTriggerEntity(entity);
+
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_dynamicBody;
+	tempDef.position.Set(float32(playerX), float32(playerY));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, GROUND | ENVIRONMENT, 0.3f); //change to true later
+
+
+	tempPhsBody.SetRotationAngleDeg(rotationDeg);
+	tempPhsBody.SetGravityScale(0.f);
+
+
+	float projSpeedMult = 10;
+	activeProjDir = b2Vec2(cos(rotationDeg * PI / 180) * projSpeedMult, sin(rotationDeg * PI / 180) * projSpeedMult);
+	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(activeProjDir);
+	activeHook = entity; // ref for later use
+
+
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
+
+	return entity;
+}
+
+
 
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
@@ -198,7 +274,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON | TRIGGER);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 		tempPhsBody.SetPosition(b2Vec2(267.f, 5.f));
@@ -232,7 +308,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, PLAYER | OBJECTS | ENEMY | HEXAGON | TRIGGER);
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 	}
@@ -385,6 +461,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		
 		//ECS::GetComponent<Player>(entity).InitPlayer(&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
+		playerRef = entity;
 	}
 	
 
@@ -403,10 +480,47 @@ void PhysicsPlayground::Update()
 	ECS::GetComponent<Background>(background).update();
 
 
+	//If the hook is in its "in flight" state, update its movement
+	
+	//ECS::GetComponent<Hook>(activeHook).Update();
+	
+	queueDeleteHookCheck();
+	queueHookCheck();
+
+	//hook update
+	
 }
 
 void PhysicsPlayground::KeyboardHold()
 {
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+
+	float speed = 1.f;
+	b2Vec2 vel = b2Vec2(0.f, 0.f);
+
+	if (Input::GetKey(Key::Shift))
+	{
+		speed *= 5.f;
+	}
+
+	if (Input::GetKey(Key::A))
+	{
+		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
+	}
+	if (Input::GetKey(Key::D))
+	{
+		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
+	}
+
+	//Change physics body size for circle
+	if (Input::GetKey(Key::O))
+	{
+		player.ScaleBody(1.3 * Timer::deltaTime, 0);
+	}
+	else if (Input::GetKey(Key::I))
+	{
+		player.ScaleBody(-1.3 * Timer::deltaTime, 0);
+	}
 }
 
 void PhysicsPlayground::KeyboardDown()
@@ -426,6 +540,15 @@ void PhysicsPlayground::KeyboardDown()
 			canJump.m_canJump = false;
 		}
 	}
+	if (Input::GetKeyDown(Key::H))
+	{
+		queueHook();
+	}
+	if (Input::GetKeyDown(Key::G))
+	{
+		queueDeleteHook();
+	}
+	
 }
 
 void PhysicsPlayground::KeyboardUp()

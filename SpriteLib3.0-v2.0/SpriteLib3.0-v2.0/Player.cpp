@@ -35,7 +35,7 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 	nlohmann::json animations = File::LoadJSON(animationJSON);
 
 	//IDLE ANIMATIONS\\
-	
+
 	//Idle Left
 	m_animController->AddAnimation(animations["IdleLeft"].get<Animation>());
 	//Idle Right
@@ -101,11 +101,13 @@ void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, C
 {
 	m_transform = transform;
 	m_hasPhysics = hasPhys;
+	
 	if (hasPhys)
 	{
 		m_physBody = body;
 	}
 	m_canJump = jump;
+	m_physicsWorld = physWorld;
 }
 
 void Player::Update()
@@ -314,3 +316,6 @@ void Player::SetActiveAnimation(int anim)
 {
 	m_animController->SetActiveAnim(anim);
 }
+
+
+
