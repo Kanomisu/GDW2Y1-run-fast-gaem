@@ -78,7 +78,7 @@ public:
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 	
 	//Alternative Init when no animations are implemented
-	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr, b2World* = nullptr);
+	void InitPlayer(Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr, CanJump* jump = nullptr);
 
 	void Update();
 	void MovementUpdate();
