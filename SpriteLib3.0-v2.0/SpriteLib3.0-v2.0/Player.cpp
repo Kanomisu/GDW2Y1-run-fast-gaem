@@ -157,10 +157,12 @@ void Player::MovementUpdate()
 				m_moving = true;
 			}
 
-			if (Input::GetKey(Key::Space))
+			if (Input::GetKey(Key::Space) && m_canJump->m_canJump)
 			{
 				m_jumping = true;
 				m_locked = true;
+				m_physBody->SetVelocity(vec3(0.f, m_jumpHeight, 0.f));
+				m_canJump->m_canJump = false;
 			}
 		}
 		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y, m_physBody->GetVelocity().z));
@@ -290,7 +292,7 @@ void Player::PlayerSpeedLevel()
 		m_playerSpeed = 40.f;
 		std::cout << "Key Pressed" << std::endl;
 	}
-	if (Input::GetKeyDown(Key::P)) {
+	if (Input::GetKeyDown(Key::L)) {
 		m_playerSpeed = 80.f;
 		std::cout << "Key Pressed" << std::endl;
 	}
