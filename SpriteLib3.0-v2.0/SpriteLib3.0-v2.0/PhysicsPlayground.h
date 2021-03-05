@@ -44,6 +44,8 @@ public:
 		}
 	}
 
+	int getActiveHook();
+
 	void queueDeleteHook()
 	{
 		m_hookDeleteQueued = true;
