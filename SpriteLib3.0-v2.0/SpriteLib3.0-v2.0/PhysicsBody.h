@@ -28,7 +28,7 @@ enum EntityCategories
 	ENEMY		= 0x0032,
 	PICKUP		= 0x0064,
 	TRIGGER		= 0x0128,
-	HEXAGON		= 0x0256
+	HOOK		= 0x0256
 };
 
 

@@ -7,13 +7,18 @@ class Hook : public Trigger
 {
 public:
 	Hook();
-	void Update();
+	
 	void PassEntity(int ent);
 
 	void OnTrigger() override;
 
+	void Update() override;
 	void OnEnter() override;
 	void OnExit() override;
+
+
+	bool isHookAttached() override;
+
 protected:
 	int myEntity = NULL;
 	bool attached = false;

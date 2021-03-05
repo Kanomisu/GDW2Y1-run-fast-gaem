@@ -96,6 +96,10 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 }
 
+void Player::SetScene(PhysicsPlayground* scene)
+{
+	m_currScene = scene;
+}
 
 void Player::InitPlayer(Transform* transform, bool hasPhys, PhysicsBody* body, CanJump* jump)
 {
@@ -127,7 +131,10 @@ void Player::MovementUpdate()
 	float airSpeedMultiplier = 1.f; //TODO Make it so you can adjust your air speed only slightly
 	float friction = 0.8f;
 
+	//check if hooks attached first, then if its attached, change how movement works
+	//ECS::GetComponent<Trigger*>(m_currScene->getActiveHook());
 
+		//get trigger ->scene that returns hook entity ->
 	//Checks if grounded and resets some stuff
 	if (m_canJump->m_canJump) {
 		airSpeedMultiplier = 1.f;
