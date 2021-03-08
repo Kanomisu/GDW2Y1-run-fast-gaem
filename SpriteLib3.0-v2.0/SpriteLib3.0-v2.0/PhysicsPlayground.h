@@ -26,7 +26,7 @@ public:
 	void KeyboardDown() override;
 	void KeyboardUp() override;
 
-	int ShootHook(float rotationDeg);
+	int ShootHook();
 	
 
 	
@@ -39,10 +39,12 @@ public:
 	{
 		if (m_hookQueued)
 		{
-			ShootHook(m_hookRotation);
+			ShootHook();
 			m_hookQueued = false;
 		}
 	}
+
+
 
 	int getActiveHook();
 
@@ -64,9 +66,11 @@ public:
 		}
 	}
 
-	void MouseLocation(vec2 mousePos);
+	void PrintMouseLocation(vec2 mousePos);
+	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
 	void MousePress(SDL_MouseMotionEvent event);
+
 
 protected:
 	bool m_hookDeleteQueued = false;

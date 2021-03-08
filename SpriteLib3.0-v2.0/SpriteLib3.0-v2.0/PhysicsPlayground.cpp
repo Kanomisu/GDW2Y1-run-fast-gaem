@@ -1,7 +1,7 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "Hook.h"
-
+#include <cmath>
 #include <random>
 
 int playerX = 0;
@@ -25,7 +25,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 }
 
 
-int PhysicsPlayground::ShootHook(float rotationDeg)
+int PhysicsPlayground::ShootHook()
 {
 	//kill pre existing hook
 	if (activeHook != NULL)
@@ -69,17 +69,30 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	tempDef.position.Set(float32(playerX), float32(playerY));
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, HOOK, GROUND | ENVIRONMENT, 0.3f); //change to true later
 
 
-	tempPhsBody.SetRotationAngleDeg(rotationDeg);
+
+	//--------------------- Vector projectile travels on
+
+	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
+
+	vec2 mouseGL = m_mousePos; //converted world space mouse to GL space mouse
+
+	float Vec1x = -1 * (playerPos.x - mouseGL.x);
+	float Vec1y = -1 * (playerPos.y - mouseGL.y);
+
+	float Vec1Magnitude = sqrt(pow(Vec1x, 2.0) + pow(Vec1y, 2.0));
+	float projSpeedMult = 10;
+	
+	activeProjDir = b2Vec2(Vec1x/Vec1Magnitude * projSpeedMult, Vec1y/Vec1Magnitude * projSpeedMult);
+	//------------------------------
+
+
+
+	tempPhsBody.SetRotationAngleDeg(0);//rotation of the actual sprite
 	tempPhsBody.SetGravityScale(0.f);
 
-
-	float projSpeedMult = 10;
-	activeProjDir = b2Vec2(cos(rotationDeg * PI / 180) * projSpeedMult, sin(rotationDeg * PI / 180) * projSpeedMult);
 	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(activeProjDir);
 	activeHook = entity; // ref for later use
 
@@ -378,7 +391,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
-	MouseLocation(m_mousePos);
+	//PrintMouseLocation(m_mousePos);
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 	ECS::GetComponent<Background>(background).update();
 	if (activeHook != NULL)
@@ -400,16 +413,22 @@ int PhysicsPlayground::getActiveHook()
 	return activeHook;
 }
 
-void PhysicsPlayground::MouseLocation(vec2 mousePos)
+void PhysicsPlayground::PrintMouseLocation(vec2 mousePos)
 {
 	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
 
 	vec2 mouseGL = mousePos; //converted world space mouse to GL space mouse
 
-	float dx = playerPos.x - mouseGL.x;
-	float dy = playerPos.y - mouseGL.y;
+	float dx = -1*(playerPos.x - mouseGL.x);
+	float dy = -1*(playerPos.y - mouseGL.y);
 
 	std::cout << "X: " << dx << "\tY: " << dy << "\n";
+}
+
+vec2 PhysicsPlayground::GetMouseLocation()
+{
+	return m_mousePos;
+
 }
 
 void PhysicsPlayground::MouseMotion(SDL_MouseMotionEvent event)
@@ -454,7 +473,7 @@ void PhysicsPlayground::KeyboardDown()
 	}
 	if (Input::GetKeyDown(Key::H))
 	{
-		queueHook();
+		queueHook(0);
 	}
 	if (Input::GetKeyDown(Key::G))
 	{
