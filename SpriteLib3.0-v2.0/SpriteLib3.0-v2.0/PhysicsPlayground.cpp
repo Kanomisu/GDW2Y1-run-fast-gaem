@@ -378,13 +378,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 void PhysicsPlayground::Update()
 {
+	MouseLocation(m_mousePos);
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 	ECS::GetComponent<Background>(background).update();
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();
 	}
-
 
 	//If the hook is in its "in flight" state, update its movement
 	
@@ -398,6 +398,27 @@ void PhysicsPlayground::Update()
 int PhysicsPlayground::getActiveHook()
 {
 	return activeHook;
+}
+
+void PhysicsPlayground::MouseLocation(vec2 mousePos)
+{
+	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
+
+	vec2 mouseGL = mousePos; //converted world space mouse to GL space mouse
+
+	float dx = playerPos.x - mouseGL.x;
+	float dy = playerPos.y - mouseGL.y;
+
+	std::cout << "X: " << dx << "\tY: " << dy << "\n";
+}
+
+void PhysicsPlayground::MouseMotion(SDL_MouseMotionEvent event)
+{
+	m_mousePos = Util::ConvertToGL(m_sceneReg, vec2(float(event.x), float(event.y)));
+}
+
+void PhysicsPlayground::MousePress(SDL_MouseMotionEvent event)
+{
 }
 
 void PhysicsPlayground::KeyboardHold()

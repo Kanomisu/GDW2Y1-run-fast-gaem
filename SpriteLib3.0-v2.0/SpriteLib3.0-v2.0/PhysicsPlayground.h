@@ -63,6 +63,11 @@ public:
 			m_hookDeleteQueued = false;
 		}
 	}
+
+	void MouseLocation(vec2 mousePos);
+	void MouseMotion(SDL_MouseMotionEvent event);
+	void MousePress(SDL_MouseMotionEvent event);
+
 protected:
 	bool m_hookDeleteQueued = false;
 	bool m_hookQueued = false;
@@ -70,6 +75,8 @@ protected:
 
 	int playerRef;
 	int activeHook = NULL;
+
+	vec2 m_mousePos = vec2(0.f, 0.f);
 
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
