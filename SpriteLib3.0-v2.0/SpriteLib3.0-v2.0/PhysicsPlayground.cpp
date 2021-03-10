@@ -131,7 +131,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-80.f, 80.f, -80.f, 80.f);
+		vec4 temp = vec4(-80.f,80.f, -80.f, 80.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -405,7 +405,7 @@ void PhysicsPlayground::Update()
 	
 	queueDeleteHookCheck();
 	queueHookCheck();
-	
+	//Scene::AdjustScrollOffset();
 }
 
 int PhysicsPlayground::getActiveHook()
