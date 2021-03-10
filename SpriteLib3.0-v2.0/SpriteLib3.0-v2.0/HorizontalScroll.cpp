@@ -6,21 +6,22 @@ HorizontalScroll::HorizontalScroll()
 
 void HorizontalScroll::Update()
 {
+	float shift = 0.0;
 	//Above focus
-	if (m_focus->GetPosition().x > m_cam->m_localPosition.x + m_offset)
+	if (m_focus->GetPosition().x + shift > m_cam->m_localPosition.x + m_offset)
 	{
 		//Calculate the amount the focus has "pushed" the camera right by
-		float difference = m_focus->GetPosition().x - (m_cam->m_localPosition.x + m_offset);
+		float difference = m_focus->GetPosition().x  + shift - (m_cam->m_localPosition.x + m_offset);
 		
 		//Adjust the camera
 		m_cam->SetPosition(vec3(m_cam->GetPosition().x + difference, m_cam->GetPosition().y, m_cam->GetPosition().z));
 	}
 
 	//Below focus
-	if (m_focus->GetPosition().x < m_cam->m_localPosition.x - m_offset)
+	if (m_focus->GetPosition().x + shift< m_cam->m_localPosition.x - m_offset)
 	{
 		//Calculate the amount the focus has "pushed" the camera left by
-		float difference = m_focus->GetPosition().x - (m_cam->m_localPosition.x - m_offset);
+		float difference = m_focus->GetPosition().x + shift - (m_cam->m_localPosition.x - m_offset);
 
 		//Adjust the camera
 		m_cam->SetPosition(vec3(m_cam->GetPosition().x + difference, m_cam->GetPosition().y, m_cam->GetPosition().z));
