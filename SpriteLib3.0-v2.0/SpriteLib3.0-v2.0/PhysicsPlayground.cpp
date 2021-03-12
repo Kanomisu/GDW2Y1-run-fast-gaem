@@ -8,7 +8,7 @@ int playerX = 0;
 int playerY = 0;
 
 b2Vec2 activeProjDir;
-
+b2Vec2 attackPath;
 
 
 
@@ -87,7 +87,54 @@ int PhysicsPlayground::ShootHook(float rotationDeg)
 	return entity;
 }
 
+int PhysicsPlayground::Attack()
+{
+	//pre-existing hitbox
+	if (activeATK != NULL)
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(activeATK);
+	}
 
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	
+	//Sets up the components
+	std::string fileName = "boxSprite.jpg";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 8);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	float pX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
+	float pY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(pX + 10, pY + 5, 10)); //infront of player
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_dynamicBody;
+	tempDef.position.Set(float32(pX + 10), float32(pY + 6));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, ENEMY, 0.3f); //kill da enemy
+	
+	tempPhsBody.SetGravityScale(0.f);
+	attackPath = b2Vec2(0, -4); //basic cut downwards linearly for now, approx last 12
+	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(attackPath);
+	activeATK = entity;
+
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody();
+
+	return entity;
+}
 
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
@@ -380,11 +427,41 @@ void PhysicsPlayground::Update()
 	
 	//ECS::GetComponent<Hook>(activeHook).Update();
 	
+	//hook update
 	queueDeleteHookCheck();
 	queueHookCheck();
-
-	//hook update
 	
+	//attack update
+	deleteAtk();
+	startAtk();
+}
+
+void PhysicsPlayground::MouseClick(SDL_MouseButtonEvent evnt)
+{
+	ImGui::GetIO().MouseDown[0] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT));
+	ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
+	
+	//RMB once to shoot hook, RMB once again to get rid of it
+	if (ImGui::GetIO().MouseDown[1])
+	{
+		if (!activeHook)
+		{
+			queueHook();
+		}
+		else
+		{
+			queueDeleteHook();
+		}
+	}
+
+	//LMB Attack
+	if (ImGui::GetIO().MouseDown[0])
+	{
+		if (!activeATK)
+		{
+			queueAtk();
+		}
+	}
 }
 
 void PhysicsPlayground::KeyboardHold()
@@ -418,15 +495,6 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
 	}
-	if (Input::GetKeyDown(Key::H))
-	{
-		queueHook();
-	}
-	if (Input::GetKeyDown(Key::G))
-	{
-		queueDeleteHook();
-	}
-	
 }
 
 void PhysicsPlayground::KeyboardUp()
