@@ -131,7 +131,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-80.f,80.f, -80.f, 80.f);
+		vec4 temp = vec4(-240.f,240.f, -240.f, 240.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -176,6 +176,40 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Down - Bottom
 	CreateBoxEntity("boxSprite.jpg", 128, 16, 268.f, -74.f);
 
+	//Testing Sizing
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "JumpAndDash.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32 * 49, 32 * 32);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -400.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(30.f), float32(-10.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, ENEMY | OBJECTS | HOOK);
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+
+	}
+
+
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -192,7 +226,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up the components
 		std::string fileName = "spritesheets/CharSpritesheet.png";
 		std::string animations = "charAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 35, 35, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 70, 70, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
 			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
 
 
