@@ -1,7 +1,7 @@
 #include "Game.h"
 
 #include <random>
-
+#include "TestScene.h"
 
 Game::~Game()
 {
@@ -40,9 +40,12 @@ void Game::InitGame()
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
 	m_scenes.push_back(p);
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
+	m_scenes.push_back(new TestScene("Test Scene sexy baby"));
 	 
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[1];
+	//m_activeScene = m_scenes[1];
+	m_activeScene = m_scenes[3];
+
 
 	m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
 
