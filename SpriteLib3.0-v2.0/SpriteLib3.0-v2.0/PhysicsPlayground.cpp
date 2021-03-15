@@ -131,7 +131,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-240.f,240.f, -240.f, 240.f);
+		vec4 temp = vec4(-169.f,160.f, -160.f, 160.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -157,7 +157,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x, Cam.GetPosition().y, 1.f));
 
-		ECS::GetComponent<Background>(entity).InitBackground(fileName, 360, 240, &ECS::GetComponent<Sprite>(entity),
+		ECS::GetComponent<Background>(entity).InitBackground(fileName, 720, 480, &ECS::GetComponent<Sprite>(entity),
 			&ECS::GetComponent<Transform>(entity));
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		background = entity;
@@ -166,15 +166,16 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//BEGINNING\\
 
 	//Setup static Top Platform
-	CreateBoxEntity("boxSprite.jpg", 256, 16, 60.f, -20.f);
+	CreateBoxEntity("boxSprite.jpg", 220, 10, 10.f, -160.f, 0, 0);
 
-	
+	/*
 	//Jump over block
 	CreateBoxEntity("boxSprite.jpg", 64, 16, 196.f, 10.f, 90);
 	//Down - Left
 	CreateBoxEntity("boxSprite.jpg", 64, 16, 196.f, -50.f, 90);
 	//Down - Bottom
 	CreateBoxEntity("boxSprite.jpg", 128, 16, 268.f, -74.f);
+	*/
 
 	//Testing Sizing
 	{
