@@ -91,6 +91,8 @@ protected:
 
 	int background = 1;
 
+	unsigned int backgroundID;
+
 	int puzzleWall1;
 	int puzzleWall2;
 };
