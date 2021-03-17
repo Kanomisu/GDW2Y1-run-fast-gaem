@@ -28,7 +28,7 @@ public:
 	void KeyboardDown() override;
 	void KeyboardUp() override;
 
-	int ShootHook(float rotationDeg);
+	int ShootHook();
 	
 
 	
@@ -41,10 +41,14 @@ public:
 	{
 		if (m_hookQueued)
 		{
-			ShootHook(m_hookRotation);
+			ShootHook();
 			m_hookQueued = false;
 		}
 	}
+
+
+
+	int getActiveHook();
 
 	void queueDeleteHook()
 	{
@@ -93,6 +97,13 @@ public:
 		}
 	}
 
+
+	void PrintMouseLocation(vec2 mousePos);
+	vec2 GetMouseLocation();
+	void MouseMotion(SDL_MouseMotionEvent event);
+	void MousePress(SDL_MouseMotionEvent event);
+
+
 protected:
 	bool m_hookDeleteQueued = false;
 	bool m_hookQueued = false;
@@ -100,6 +111,8 @@ protected:
 
 	int playerRef;
 	int activeHook = NULL;
+
+	vec2 m_mousePos = vec2(0.f, 0.f);
 
 	bool m_attackDelete = false;
 	bool m_attackTimer = false;
@@ -113,6 +126,8 @@ protected:
 	PhysicsPlaygroundListener listener;
 
 	int background = 1;
+
+	unsigned int backgroundID;
 
 	int puzzleWall1;
 	int puzzleWall2;

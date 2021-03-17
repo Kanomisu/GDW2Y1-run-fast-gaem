@@ -66,7 +66,7 @@ enum AnimDir
 	DOWN
 #endif
 };
-
+class PhysicsPlayground;
 class Player
 {
 public:
@@ -92,6 +92,9 @@ public:
 		m_physBody = &ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	}
 	
+	void SetScene(PhysicsPlayground* scene);
+
+	PhysicsPlayground* m_currScene;
 
 private:
 	void SetActiveAnimation(int anim);

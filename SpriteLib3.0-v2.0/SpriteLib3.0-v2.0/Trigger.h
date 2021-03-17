@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+
 class Trigger
 {
 public:
@@ -10,8 +11,13 @@ public:
 	virtual void OnEnter();
 	virtual void OnExit();
 
+	virtual void Update();
+	virtual bool isHookAttached();
+
 	void SetTriggerEntity(int triggerEnt);
 	int GetTriggerEntity();
+
+
 
 	void AddTargetEntity(int entity);
 	void SetTargetEntities(std::vector<int> entities);

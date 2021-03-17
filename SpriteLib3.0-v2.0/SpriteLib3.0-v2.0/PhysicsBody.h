@@ -28,7 +28,7 @@ enum EntityCategories
 	ENEMY		= 0x0032,
 	PICKUP		= 0x0064,
 	TRIGGER		= 0x0128,
-	HEXAGON		= 0x0256
+	HOOK		= 0x0256
 };
 
 
@@ -43,7 +43,10 @@ public:
 	//Constructs a polygon collider
 	PhysicsBody(int entity, BodyType bodyType, b2Body* body, std::vector<b2Vec2> points, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction=1.f, float density=1.f);
 
-	//Delete the physics body
+	//Constructs a chain-shape collider
+	PhysicsBody(int entity, b2Body* body, std::vector<b2Vec2> points, bool sensor, EntityCategories category, int collidesWith, float friction = 1.f);
+
+	//Delete the physics body=
 	void DeleteBody();
 
 	//Update physics stuffs
