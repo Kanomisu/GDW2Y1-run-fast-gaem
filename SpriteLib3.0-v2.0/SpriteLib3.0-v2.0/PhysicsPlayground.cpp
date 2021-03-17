@@ -460,6 +460,11 @@ void PhysicsPlayground::Update()
 		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
 		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
 	}
+=========
+	//attack update
+	deleteAtk();
+	startAtk();
+>>>>>>>>> Temporary merge branch 2
 }
 
 int PhysicsPlayground::getActiveHook()
