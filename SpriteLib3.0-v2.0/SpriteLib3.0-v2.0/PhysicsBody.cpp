@@ -127,6 +127,36 @@ PhysicsBody::PhysicsBody(int entity, BodyType bodyType, b2Body* body, std::vecto
 	m_centerOffset = centerOffset;
 }
 
+PhysicsBody::PhysicsBody(int entity, b2Body* body, std::vector<b2Vec2> points, bool sensor, EntityCategories category, int collidesWith, float friction)
+{
+	
+	b2ChainShape tempShape;
+	
+	tempShape.CreateLoop(points.data(),points.size());
+
+	//Creates the actual fixture (aka, shape, mass, etc);
+	b2FixtureDef tempFixture;
+	tempFixture.shape = &tempShape;
+	tempFixture.density = 0.f;
+	tempFixture.friction = friction;
+	tempFixture.isSensor = sensor;
+	tempFixture.filter.categoryBits = category;
+	tempFixture.filter.maskBits = collidesWith;
+
+	m_body = body;
+	m_body->CreateFixture(&tempFixture);
+
+	m_body->SetUserData((void*)entity);
+
+	m_body = body;
+	//m_bodyType = bodyType;
+
+	//m_width = rX - lX;
+	//m_height = tY - bY;
+
+	m_centerOffset = vec2(0,0);
+}
+
 void PhysicsBody::DeleteBody()
 {
 	if (m_body != nullptr)
