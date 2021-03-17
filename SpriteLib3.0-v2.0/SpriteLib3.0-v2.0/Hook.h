@@ -20,6 +20,7 @@ public:
 	bool isHookAttached() override;
 
 protected:
+	int speedScaling = 2;
 	int myEntity = NULL;
 	bool attached = false;
 	bool triggered = false;
