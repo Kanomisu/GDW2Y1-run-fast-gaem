@@ -20,6 +20,8 @@ public:
 	void GUIWindowOne();
 	void GUIWindowTwo();
 
+	//Mouse Input
+	void MouseClick(SDL_MouseButtonEvent evnt);
 
 	//Input overrides
 	void KeyboardHold() override;
@@ -66,6 +68,36 @@ public:
 		}
 	}
 
+	int Attack();
+	void queueAtk()
+	{
+		m_attackTimer = true;
+	}
+
+	void startAtk()
+	{
+		if (m_attackTimer)
+		{
+			Attack();
+			m_attackTimer = false;
+			m_attackDelete = true;
+		}
+	}
+
+	void deleteAtk()
+	{
+		if (m_attackDelete)
+		{
+			if (activeATK != NULL)
+			{
+				PhysicsBody::m_bodiesToDelete.push_back(activeATK);
+				activeATK = NULL;
+			}
+			m_attackDelete = false;
+		}
+	}
+
+
 	void PrintMouseLocation(vec2 mousePos);
 	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
@@ -81,6 +113,10 @@ protected:
 	int activeHook = NULL;
 
 	vec2 m_mousePos = vec2(0.f, 0.f);
+
+	bool m_attackDelete = false;
+	bool m_attackTimer = false;
+	int activeATK = NULL;
 
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;

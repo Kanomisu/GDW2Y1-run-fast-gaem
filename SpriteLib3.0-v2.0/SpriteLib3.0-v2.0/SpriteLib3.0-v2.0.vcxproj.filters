@@ -204,6 +204,9 @@
     <ClInclude Include="TestScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Attack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -384,6 +387,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Attack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
