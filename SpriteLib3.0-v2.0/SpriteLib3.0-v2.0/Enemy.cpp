@@ -1,4 +1,5 @@
 #include "Enemy.h"  
+#include "Utilities.h"
 
 void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation) {
 	m_sprite = sprite;

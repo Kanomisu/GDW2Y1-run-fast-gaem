@@ -1,5 +1,6 @@
 #pragma once  
-#include "ECS.h" 
+#include"PhysicsBody.h"
+#include "Sprite.h"
 #include "Timer.h" 
 enum States {
 	MOVELEFT,
