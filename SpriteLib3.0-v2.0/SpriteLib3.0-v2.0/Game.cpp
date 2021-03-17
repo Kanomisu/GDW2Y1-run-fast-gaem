@@ -35,7 +35,7 @@ void Game::InitGame()
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	PhysicsPlayground *p =  new PhysicsPlayground("Run fast game");
+	PhysicsPlayground *p =  new PhysicsPlayground("Project Flow");
 	p->GetPhysicsWorld();
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
 	m_scenes.push_back(p);
