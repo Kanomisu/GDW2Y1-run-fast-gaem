@@ -327,49 +327,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 	}
-	
-	//Enemy entity
-	{
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		//ECS::AttachComponent<AnimationController>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<Enemy>(entity);
-
-		//Sets up the components
-		std::string fileName = "Enemy.png";
-		//std::string animations = "charAnimations.json";
-		ECS::GetComponent<Enemy>(entity).Init(&ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<Transform>(entity), &ECS::GetComponent<PhysicsBody>(entity), 40.f, 60.f, entity);
-
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(50.f, 40.f, 2.f));
-
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(50.f), float32(40.f));
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | PLAYER | OBJECTS | PICKUP | GROUND, 1.f, 3.f);
-
-		tempPhsBody.SetRotationAngleDeg(0.f);
-		tempPhsBody.SetFixedRotation(true);
-		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
-		tempPhsBody.SetGravityScale(1.f);
-
-		enemyEnts.push_back(entity);
-	}
+	SpawnEnemy(50, 40, 40, 60);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();

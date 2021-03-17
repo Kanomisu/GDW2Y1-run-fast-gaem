@@ -11,6 +11,7 @@ void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transf
 	posRight = rightXStation;
 
 	m_entityID = ent;
+	//In this line, make it so that the Physics are asleep.
 }
 
 void Enemy::Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
@@ -26,28 +27,42 @@ void Enemy::Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, fl
 
 void Enemy::Update()
 {
+	//Fuck this framework
 	m_sprite = &ECS::GetComponent<Sprite>(m_entityID);
 	//m_animationController = &ECS::GetComponent<AnimationController>(m_entityID);
 	m_transform = &ECS::GetComponent<Transform>(m_entityID);
 	m_physBody = &ECS::GetComponent<PhysicsBody>(m_entityID);
 
-	//Check which behaviour needs to be updated.  
-	switch (m_state) {
-	case DAMAGED:
-		killEnemy();
-		break;
-	case THINKING:
-		thinking();
-		break;
-	case MOVELEFT:
-		moveLeft();
-		break;
-	case MOVERIGHT:
-		moveRight();
-		break;
-	case ATTACKING:
-		attack();
-		break;
+	//Awake Check
+	vec2 eToP = vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - m_physBody->GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y - m_physBody->GetPosition().y);
+	if (eToP.GetMagnitude() < m_awakenDistance) {
+		m_awake = true;
+		//Awaken the Physics Body
+	}
+	else {
+		m_awake = false;
+		//Schleep the MF Phys Body
+	}
+
+	if(m_awake) {
+		//Check which behaviour needs to be updated.  
+		switch (m_state) {
+		case DAMAGED:
+			killEnemy();
+			break;
+		case THINKING:
+			thinking();
+			break;
+		case MOVELEFT:
+			moveLeft();
+			break;
+		case MOVERIGHT:
+			moveRight();
+			break;
+		case ATTACKING:
+			attack();
+			break;
+		}
 	}
 }
 
@@ -58,6 +73,7 @@ void Enemy::moveLeft()
 	}
 	else {
 		m_state = THINKING;
+		m_timer = m_moveCooldown;
 	}
 }
 
@@ -68,18 +84,17 @@ void Enemy::moveRight()
 	}
 	else {
 		m_state = THINKING;
+		m_timer = m_moveCooldown;
 	}
 }
 
 void Enemy::attack()
 {
 	if (m_timer > 0) {
-		b2Vec2 playerPos = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition();
-		float x = m_attackSpeed;
-		float y = m_attackSpeed;
-		x = x * atan2((playerPos.y - m_physBody->GetPosition().y), (playerPos.x - m_physBody->GetPosition().x));
-		y = y * atan2((playerPos.y - m_physBody->GetPosition().y), (playerPos.x - m_physBody->GetPosition().x));
-		m_physBody->SetVelocity(vec3(x, y, 0));
+		vec2 EtoP = vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - m_physBody->GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y - m_physBody->GetPosition().y);
+		double EtoPAngle = atan2(EtoP.x, EtoP.y) * 57.29577951308 * -1;
+		vec3 movement = vec3(m_attackSpeed * sin(-EtoPAngle * 0.01745329f), m_attackSpeed * cos(-EtoPAngle * 0.01745329f), 0);
+		m_physBody->SetVelocity(movement);
 		m_timer -= Timer::deltaTime;
 	}
 	else {
