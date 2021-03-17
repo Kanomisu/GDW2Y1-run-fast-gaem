@@ -48,7 +48,7 @@ int PhysicsPlayground::ShootHook()
 
 	//Sets up the components
 	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 5);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
 
@@ -83,7 +83,7 @@ int PhysicsPlayground::ShootHook()
 	float Vec1y = -1 * (playerPos.y - mouseGL.y);
 
 	float Vec1Magnitude = sqrt(pow(Vec1x, 2.0) + pow(Vec1y, 2.0));
-	float projSpeedMult = 10;
+	float projSpeedMult = 100;
 	
 	activeProjDir = b2Vec2(Vec1x/Vec1Magnitude * projSpeedMult, Vec1y/Vec1Magnitude * projSpeedMult);
 	//------------------------------
@@ -436,7 +436,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, PLAYER, ENVIRONMENT | ENEMY | OBJECTS | PICKUP, 1.f, 3.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, PLAYER, PLAYER | ENEMY | OBJECTS | HOOK, 1.f, 3.f);
 
 		tempPhsBody.SetRotationAngleDeg(0.f);
 		tempPhsBody.SetFixedRotation(true);
