@@ -11,7 +11,7 @@ void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transf
 	posRight = rightXStation;
 
 	m_entityID = ent;
-	//In this line, make it so that the Physics are asleep.
+	m_physBody->GetBody()->SetAwake(false); //In this line, make it so that the Physics are asleep.
 }
 
 void Enemy::Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
@@ -37,11 +37,11 @@ void Enemy::Update()
 	vec2 eToP = vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - m_physBody->GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y - m_physBody->GetPosition().y);
 	if (eToP.GetMagnitude() < m_awakenDistance) {
 		m_awake = true;
-		//Awaken the Physics Body
+		m_physBody->GetBody()->SetAwake(true); //Awaken the Physics Body
 	}
 	else {
 		m_awake = false;
-		//Schleep the MF Phys Body
+		m_physBody->GetBody()->SetAwake(false); //Schleep the MF Phys Body
 	}
 
 	if(m_awake) {
@@ -134,7 +134,8 @@ void Enemy::killEnemy()
 		m_timer -= Timer::deltaTime;
 	}
 	else {
-		m_physBody->DeleteBody();
+		m_physBody->SetPosition(b2Vec2(0, -900));
+		m_physBody->GetBody()->SetAwake(false); //Schleep the body
 	}
 }
 
