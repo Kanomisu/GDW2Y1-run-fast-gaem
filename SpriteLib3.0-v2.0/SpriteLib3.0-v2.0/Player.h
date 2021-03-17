@@ -115,7 +115,7 @@ private:
 	//How fast the player moved while dashing
 	float m_dashSpeed = 100.f;
 
-	float m_jumpHeight = 30000.f;
+	float m_jumpHeight = 80000.f;
 
 
 	//Player's speed.

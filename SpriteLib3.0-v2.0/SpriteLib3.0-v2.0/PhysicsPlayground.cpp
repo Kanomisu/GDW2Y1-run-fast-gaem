@@ -17,7 +17,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 {
 	
 	//No gravity this is a top down scene
-	m_gravity = b2Vec2(0.f, -98.f);
+	m_gravity = b2Vec2(0.f, -88.f);
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
@@ -212,6 +212,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 128, 16, 268.f, -74.f);
 	*/
 
+	CreateBoxEntity("boxSprite.jpg", 128, 32, -2250.f, 232.f);
+
 	//Map entity - bottom
 	{
 		auto entity = ECS::CreateEntity();
@@ -300,16 +302,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//points lul
 		std::vector<b2Vec2> points = {
-		b2Vec2(-478, 917), b2Vec2(-478, 154), b2Vec2(353, 154), b2Vec2(353, -133), b2Vec2(544, -133),
-		b2Vec2(544, 121), b2Vec2(704, 121), b2Vec2(704, -38), b2Vec2(864, -38), b2Vec2(864, 151),
-		b2Vec2(800, 151), b2Vec2(800, 665), b2Vec2(1344, 665), b2Vec2(1344, 282), b2Vec2(3169, 282),
-		b2Vec2(3169, 55), b2Vec2(3202, 55), b2Vec2(3202, -228), b2Vec2(3616, -228), b2Vec2(3616, 56),
-		b2Vec2(3616, 300), b2Vec2(3208, 300), b2Vec2(3208, 322), b2Vec2(3208, 312), b2Vec2(1376, 312),
-		b2Vec2(1376, 697), b2Vec2(480, 697), b2Vec2(480, 728), b2Vec2(450, 728), b2Vec2(450, 855),
-		b2Vec2(416, 855), b2Vec2(416, 920), b2Vec2(160, 920), b2Vec2(160, 952), b2Vec2(33, 952),
-		b2Vec2(33, 919)
+		b2Vec2(-478, 918), b2Vec2(-478, 154), b2Vec2(354, 154), b2Vec2(354, -101), b2Vec2(543, -101),
+		b2Vec2(543, 121), b2Vec2(704, 121), b2Vec2(704, -39), b2Vec2(863, -39), b2Vec2(863, 179),
+		b2Vec2(801, 179), b2Vec2(801, 664), b2Vec2(1345, 664), b2Vec2(1345, 280), b2Vec2(3169, 280),
+		b2Vec2(3169, 55), b2Vec2(3201, 55), b2Vec2(3201, -229), b2Vec2(3617, -229), b2Vec2(3617, 56),
+		b2Vec2(3234, 56), b2Vec2(3234, 312), b2Vec2(3200, 312), b2Vec2(3200, 313), b2Vec2(1377, 313),
+		b2Vec2(1377, 695), b2Vec2(482, 695), b2Vec2(482, 726), b2Vec2(448, 726), b2Vec2(448, 854),
+		b2Vec2(417, 854), b2Vec2(417, 918), b2Vec2(161, 918), b2Vec2(161, 949), b2Vec2(35, 949),
+		b2Vec2(35, 923)
 		};
-
 
 
 
@@ -336,7 +337,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Sets up the components
 		std::string fileName = "spritesheets/CharSpritesheet.png";
 		std::string animations = "charAnimations.json";
-		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 70,70, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 64, 64, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity),
 			&ECS::GetComponent<Transform>(entity), true, &ECS::GetComponent<PhysicsBody>(entity), &ECS::GetComponent<CanJump>(entity));
 
 
@@ -345,7 +346,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-3700, -80, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-3700, -80, 3.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -447,7 +448,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		speed *= 5.f;
 	}
-
+	
 	if (Input::GetKey(Key::A))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
@@ -456,6 +457,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
 	}
+	
 }
 
 void PhysicsPlayground::KeyboardDown()

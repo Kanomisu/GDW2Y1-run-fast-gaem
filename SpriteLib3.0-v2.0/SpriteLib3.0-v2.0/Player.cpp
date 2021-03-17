@@ -127,6 +127,7 @@ void Player::MovementUpdate()
 	//Set up Vars
 	m_moving = false;
 	float vel = 0.f;
+	float jumpVel = 0.f;
 	float slideImpulse = 300.f;
 	float airSpeedMultiplier = 1.f; //TODO Make it so you can adjust your air speed only slightly
 	float friction = 0.8f;
@@ -168,11 +169,11 @@ void Player::MovementUpdate()
 			{
 				m_jumping = true;
 				m_locked = true;
-				m_physBody->SetVelocity(vec3(0.f, m_jumpHeight, 0.f));
+				jumpVel = m_jumpHeight;
 				m_canJump->m_canJump = false;
 			}
 		}
-		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y, m_physBody->GetVelocity().z));
+		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y + jumpVel ,0.f));
 	}
 	if (m_dashing) {
 		if (m_facing == RIGHT) {
