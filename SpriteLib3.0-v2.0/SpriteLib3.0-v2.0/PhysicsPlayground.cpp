@@ -368,6 +368,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	SpawnEnemy(50, 40, 40, 60);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
