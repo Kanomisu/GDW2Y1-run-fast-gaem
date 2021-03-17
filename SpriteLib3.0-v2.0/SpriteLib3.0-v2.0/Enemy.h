@@ -22,16 +22,18 @@ private:
 	bool m_awake = false;
 
 	//Variables  
-	float m_speed = 40.f;
+	float m_speed = 10.f;
 	float m_attackSpeed = 100.f;
-	float m_engagementRange = 120.f;
+	float m_engagementRange = 20.f;
 
 	//States  
 	int m_state = THINKING;
 	float m_timer = 0; //Used to timed behaviours  
 	float m_attackCooldown = 0.8f;
 	float m_attackLength = 0.7f;
-	float m_deathTimer = 1.24f; //Set this to the length of the death animation.  
+	float m_deathTimer = 1.24f; //Set this to the length of the death animation.
+	float m_moveCooldown = 1.0f;
+	float m_awakenDistance = 50.f;
 
 	//Positions  
 	float posLeft = 0.f;
