@@ -322,6 +322,11 @@ void Player::PlayerSpeedLevel()
 	*/
 }
 
+void Player::damage()
+{
+	//Damage the player.
+}
+
 void Player::SetActiveAnimation(int anim)
 {
 	m_animController->SetActiveAnim(anim);
