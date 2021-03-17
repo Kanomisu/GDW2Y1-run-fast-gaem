@@ -455,6 +455,11 @@ void PhysicsPlayground::Update()
 	//attack update
 	deleteAtk();
 	startAtk();
+
+	for (int x = 0; x < this->enemyEnts.size(); x++) {
+		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
+		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
+	}
 }
 
 int PhysicsPlayground::getActiveHook()

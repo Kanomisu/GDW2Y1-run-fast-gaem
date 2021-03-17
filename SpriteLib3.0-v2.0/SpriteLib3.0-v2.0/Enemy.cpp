@@ -1,7 +1,7 @@
 #include "Enemy.h"  
 #include "Utilities.h"
 
-void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation) {
+void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
 	m_sprite = sprite;
 	m_animationController = animCon;
 	m_transform = transform;
@@ -9,10 +9,28 @@ void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transf
 
 	posLeft = leftXStation;
 	posRight = rightXStation;
+
+	m_entityID = ent;
+}
+
+void Enemy::Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
+	m_sprite = sprite;
+	m_transform = transform;
+	m_physBody = physBody;
+
+	posLeft = leftXStation;
+	posRight = rightXStation;
+
+	m_entityID = ent;
 }
 
 void Enemy::Update()
 {
+	m_sprite = &ECS::GetComponent<Sprite>(m_entityID);
+	//m_animationController = &ECS::GetComponent<AnimationController>(m_entityID);
+	m_transform = &ECS::GetComponent<Transform>(m_entityID);
+	m_physBody = &ECS::GetComponent<PhysicsBody>(m_entityID);
+
 	//Check which behaviour needs to be updated.  
 	switch (m_state) {
 	case DAMAGED:
