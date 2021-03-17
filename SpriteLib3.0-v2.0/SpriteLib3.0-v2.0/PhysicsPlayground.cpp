@@ -48,7 +48,7 @@ int PhysicsPlayground::ShootHook()
 
 	//Sets up the components
 	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 5);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
 
