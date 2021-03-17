@@ -327,6 +327,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 		tempPhsBody.SetRotationAngleDeg(90.f);
 	}
+	
 	//Enemy entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -334,15 +335,14 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<AnimationController>(entity);
+		//ECS::AttachComponent<AnimationController>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<Enemy>(entity);
 
 		//Sets up the components
 		std::string fileName = "Enemy.png";
 		//std::string animations = "charAnimations.json";
-		ECS::GetComponent<Enemy>(entity).Init(&ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity), &ECS::GetComponent<PhysicsBody>, 40.f, 60.f);
-
+		ECS::GetComponent<Enemy>(entity).Init(&ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<Transform>(entity), &ECS::GetComponent<PhysicsBody>(entity), 40.f, 60.f, entity);
 
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
@@ -361,12 +361,14 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, PLAYER, ENVIRONMENT | ENEMY | OBJECTS | PICKUP, 1.f, 3.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, ENEMY, ENVIRONMENT | PLAYER | OBJECTS | PICKUP | GROUND, 1.f, 3.f);
 
 		tempPhsBody.SetRotationAngleDeg(0.f);
 		tempPhsBody.SetFixedRotation(true);
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		tempPhsBody.SetGravityScale(1.f);
+
+		enemyEnts.push_back(entity);
 	}
 	//Player entity
 	{
@@ -447,6 +449,11 @@ void PhysicsPlayground::Update()
 	queueDeleteHookCheck();
 	queueHookCheck();
 	//Scene::AdjustScrollOffset();
+
+	for (int x = 0; x < this->enemyEnts.size(); x++) {
+		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
+		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
+	}
 }
 
 int PhysicsPlayground::getActiveHook()

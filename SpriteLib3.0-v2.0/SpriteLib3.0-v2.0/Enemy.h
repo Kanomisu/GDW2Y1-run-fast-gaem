@@ -17,6 +17,10 @@ private:
 	AnimationController* m_animationController = nullptr;
 	PhysicsBody* m_physBody = nullptr;
 
+	unsigned int m_entityID;
+
+	bool m_awake = false;
+
 	//Variables  
 	float m_speed = 40.f;
 	float m_attackSpeed = 100.f;
@@ -30,11 +34,11 @@ private:
 	float m_deathTimer = 1.24f; //Set this to the length of the death animation.  
 
 	//Positions  
-	float posLeft;
-	float posRight;
+	float posLeft = 0.f;
+	float posRight = 0.f;
 public:
-	void Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation);
-	~Enemy();
+	void Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent);
+	void Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent); //Testing ONLY, do not use
 	void Update();
 
 	//Behaviours  

@@ -44,8 +44,6 @@ public:
 		}
 	}
 
-	std::vector <unsigned int> EnemyEnts = {};
-
 	int getActiveHook();
 
 	void queueDeleteHook()
@@ -88,6 +86,8 @@ protected:
 	std::string m_fileInput;
 
 	PhysicsPlaygroundListener listener;
+
+	std::vector <unsigned int> enemyEnts = {};
 
 	int background = 1;
 
