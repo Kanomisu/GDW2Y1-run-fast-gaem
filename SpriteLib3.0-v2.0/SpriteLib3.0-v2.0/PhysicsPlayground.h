@@ -31,6 +31,7 @@ public:
 	int ShootHook();
 	
 	void SpawnEnemy(float spawnX, float spawnY, float roamA, float roamB) {
+		std::cout << "Enemy Spawned" << std::endl;
 		//Enemy entity
 		auto entity = ECS::CreateEntity();
 

@@ -367,7 +367,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(50, 40, 40, 60);
+	SpawnEnemy(-3700, -80, -3680, -3720);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -452,14 +452,19 @@ void PhysicsPlayground::Update()
 	queueHookCheck();
 	//Scene::AdjustScrollOffset();
 
+	//attack update
+	deleteAtk();
+	startAtk();
+
 	for (int x = 0; x < this->enemyEnts.size(); x++) {
 		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
 		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
 	}
-
+=========
 	//attack update
 	deleteAtk();
 	startAtk();
+>>>>>>>>> Temporary merge branch 2
 }
 
 int PhysicsPlayground::getActiveHook()
