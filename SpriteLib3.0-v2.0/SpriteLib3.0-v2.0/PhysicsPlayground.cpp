@@ -320,7 +320,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-
+	SpawnEnemy(50, 40, 40, 60);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -403,6 +403,11 @@ void PhysicsPlayground::Update()
 	queueDeleteHookCheck();
 	queueHookCheck();
 	//Scene::AdjustScrollOffset();
+
+	for (int x = 0; x < this->enemyEnts.size(); x++) {
+		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
+		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
+	}
 }
 
 int PhysicsPlayground::getActiveHook()
