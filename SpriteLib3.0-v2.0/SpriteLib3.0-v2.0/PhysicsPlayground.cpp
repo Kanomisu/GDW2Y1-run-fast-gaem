@@ -69,7 +69,7 @@ int PhysicsPlayground::ShootHook()
 	tempDef.position.Set(float32(playerX), float32(playerY));
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, HOOK, GROUND | ENVIRONMENT, 0.3f); //change to true later
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, HOOK, GROUND, 0.3f); //change to true later
 
 
 
@@ -211,27 +211,32 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 
-
+	
+	
 	//Testing Sizing
 	{
+		/*
+		
 		//Creates entity
 		auto entity = ECS::CreateEntity();
 
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
+		//ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
 		std::string fileName = "map.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -400.f, 2.f));
 
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		//auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		//auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
+		//float shrinkX = 0.f;
+		//float shrinkY = 0.f;
+
+		/*
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
@@ -240,10 +245,33 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, ENEMY | OBJECTS | HOOK);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, FRIENDLY); //Do not use the variable environment
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		*/
+		
+		
+
+
+		
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "map.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
+		
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -10.f, 2.f));
+		
 
 	}
+
+	
+
 	//BEGINNING\\
 
 	/*
@@ -445,7 +473,7 @@ void PhysicsPlayground::Update()
 
 	//If the hook is in its "in flight" state, update its movement
 	
-	//ECS::GetComponent<Hook>(activeHook).Update();
+	
 	
 	//hook update
 	queueDeleteHookCheck();
@@ -552,6 +580,8 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
 	}
+
+	
 }
 
 void PhysicsPlayground::KeyboardUp()
