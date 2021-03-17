@@ -367,7 +367,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-
 	SpawnEnemy(50, 40, 40, 60);
 	//Player entity
 	{
