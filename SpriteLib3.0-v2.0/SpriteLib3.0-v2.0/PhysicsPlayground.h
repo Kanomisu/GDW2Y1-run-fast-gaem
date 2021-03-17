@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-
+	std::vector <unsigned int> EnemyEnts = {};
 
 	int getActiveHook();
 

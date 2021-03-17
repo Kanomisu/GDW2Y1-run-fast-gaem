@@ -84,6 +84,7 @@ public:
 	void MovementUpdate();
 	void AnimationUpdate();
 	void PlayerSpeedLevel();
+	void damage();
 
 	void reattachBody()
 	{
@@ -96,13 +97,15 @@ public:
 
 	PhysicsPlayground* m_currScene;
 
+	//Are you currently attacking?????
+	bool m_attacking = false;
+
 private:
 	void SetActiveAnimation(int anim);
 
 	//Basically, any animation OTHER than moving will not have a cancel, and we'll be checking whether or not that animation is done
 	bool m_moving = false;
-	//Are you currently attacking?????
-	bool m_attacking = false;
+	
 	//Are you currently jumping?????
 	bool m_jumping = false;
 	//Have we locked the player from moving during this animation?
