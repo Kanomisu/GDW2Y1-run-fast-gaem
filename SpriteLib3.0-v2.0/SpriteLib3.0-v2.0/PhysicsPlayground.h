@@ -20,6 +20,8 @@ public:
 	void GUIWindowOne();
 	void GUIWindowTwo();
 
+	void CheckEvent();
+
 	//Mouse Input
 	void MouseClick(SDL_MouseButtonEvent evnt);
 
@@ -112,16 +114,24 @@ public:
 	int Attack();
 	void queueAtk()
 	{
-		m_attackTimer = true;
+		m_attackBegin = true;
+		m_attackTimer = 1.0f;
 	}
 
 	void startAtk()
 	{
-		if (m_attackTimer)
+		if (m_attackBegin)
 		{
-			Attack();
-			m_attackTimer = false;
-			m_attackDelete = true;
+			if (m_attackTimer > 0)
+			{
+				Attack();
+				m_attackTimer -= Timer::deltaTime;
+			}
+			else
+			{
+				m_attackBegin = false;
+				m_attackDelete = true;
+			}
 		}
 	}
 
@@ -144,7 +154,6 @@ public:
 	void MouseMotion(SDL_MouseMotionEvent event);
 	void MousePress(SDL_MouseMotionEvent event);
 
-
 protected:
 	bool m_hookDeleteQueued = false;
 	bool m_hookQueued = false;
@@ -156,7 +165,8 @@ protected:
 	vec2 m_mousePos = vec2(0.f, 0.f);
 
 	bool m_attackDelete = false;
-	bool m_attackTimer = false;
+	bool m_attackBegin = false;
+	float m_attackTimer = 0;
 	int activeATK = NULL;
 
 	bool m_firstWindow = false;

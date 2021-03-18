@@ -150,6 +150,11 @@ void Player::MovementUpdate()
 			m_dashTimeDelta = m_dashTime;
 			std::cout << "Dashing" << std::endl;
 		}
+		/*if (ImGui::GetIO().MouseDown[0])
+		{
+			m_locked = true;
+			
+		}*/
 		else
 		{
 			if (Input::GetKey(Key::A))

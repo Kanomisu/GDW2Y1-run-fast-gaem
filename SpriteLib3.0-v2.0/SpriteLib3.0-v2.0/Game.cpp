@@ -278,7 +278,6 @@ void Game::MouseClick(SDL_MouseButtonEvent evnt)
 		ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
 		ImGui::GetIO().MouseDown[2] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE));
 	}
-
 	//Resets the enabled flag
 	m_click = false;
 }

@@ -120,8 +120,8 @@ int PhysicsPlayground::Attack()
 	
 	//Sets up the components
 	std::string fileName = "boxSprite.jpg";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 8);
-	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 28);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	float pX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
 	float pY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(pX + 10, pY + 5, 10)); //infront of player
@@ -466,30 +466,19 @@ int PhysicsPlayground::getActiveHook()
 {
 	return activeHook;
 }
+
 void PhysicsPlayground::MouseClick(SDL_MouseButtonEvent evnt)
 {
 	ImGui::GetIO().MouseDown[0] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT));
 	ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
-	
-	//RMB once to shoot hook, RMB once again to get rid of it
+
 	if (ImGui::GetIO().MouseDown[1])
 	{
-		if (!activeHook)
-		{
-			queueHook();
-		}
-		else
-		{
-			queueDeleteHook();
-		}
+		queueHook();
 	}
-	//LMB Attack
-	if (ImGui::GetIO().MouseDown[0])
+	else
 	{
-		if (!activeATK)
-		{
-			queueAtk();
-		}
+		queueDeleteHook();
 	}
 }
 
