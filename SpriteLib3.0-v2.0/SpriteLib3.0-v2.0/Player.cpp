@@ -286,7 +286,7 @@ void Player::PlayerSpeedLevel()
 		std::cout << "Key Pressed" << std::endl;
 	}
 	if (Input::GetKeyDown(Key::L)) {
-		m_playerSpeed = 80.f;
+		m_playerSpeed = 60.f;
 		std::cout << "Key Pressed" << std::endl;
 	}
 
