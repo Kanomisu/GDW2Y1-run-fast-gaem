@@ -248,23 +248,7 @@ void Player::AnimationUpdate()
 			activeAnimation = IDLE;
 		}
 	}
-	else if (m_attacking)
-	{
-		activeAnimation = ATTACK;
-
-		//Check if the attack animation is done
-		if (m_animController->GetAnimation(m_animController->GetActiveAnim()).GetAnimationDone())
-		{
-			//Will auto set to idle
-			m_locked = false;
-			m_attacking = false;
-			//Resets the attack animation
-			m_animController->GetAnimation(m_animController->GetActiveAnim()).Reset();
-
-			activeAnimation = IDLE;
-		}
-
-	}
+	
 	else if (m_dashing)
 	{
 		activeAnimation = DASH;
