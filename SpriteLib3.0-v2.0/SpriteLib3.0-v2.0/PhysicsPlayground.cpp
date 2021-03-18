@@ -1,7 +1,8 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "Hook.h"
-#include <cmath>
+#include <cmath> //pow and sqrt
+#include <math.h> //trig
 #include <random>
 
 int playerX = 0;
@@ -99,7 +100,62 @@ int PhysicsPlayground::ShootHook()
 
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
 
+	ShootRope(); //broken up for simplicity
+
 	return entity;
+}
+
+int PhysicsPlayground::ShootRope()
+{
+
+	//kill pre existing rope
+	if (activeRope != NULL)
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(activeRope);
+	}
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Sets up components
+	std::string fileName = "Rope.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1, 2); //1*2 sprite that gets stretched
+	ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition()); //Spawned at position of player
+	
+	activeRope = entity;
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
+
+	return entity;
+}
+
+void PhysicsPlayground::UpdateRope()
+{
+	//gather necessary data for later math
+	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
+	vec3 hookPos = ECS::GetComponent<Transform>(activeHook).GetPosition();
+
+	//math time to update the rope ------------------------------------------------------------------------
+
+	//get both hook and players x and y values, find the differences in each, thats the adjecent and opposite of our triangle
+	float xDiff = (hookPos.x - playerPos.x); //"adjecent side"
+	float yDiff = (hookPos.y - playerPos.y); //"opposite side"
+	//turn these into a vector
+	b2Vec2 temp = b2Vec2(xDiff, yDiff);
+	//find the angle between a b2vec2 made from the two differences and vec2(1,0), rotate the rope by that angle
+	//cos(angleBetween) = u dot v / magnitude of u * magnitude of v
+
+	float angleBetween = acos(((temp.x * 1 + temp.y * 0) / (temp.Length() * 1)));
+
+	ECS::GetComponent<Transform>(activeRope).SetRotationAngleZ(angleBetween);
+
+	//lastly scale the ropes x value based on the length of the magnitude of the vec3 we made from the differneces.
+	ECS::GetComponent<Sprite>(activeRope).SetWidth(temp.Length());
+
+
 }
 
 int PhysicsPlayground::Attack()
@@ -601,6 +657,10 @@ void PhysicsPlayground::Update()
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();
+	}
+	if (activeRope != NULL)
+	{
+		UpdateRope();
 	}
 
 	//If the hook is in its "in flight" state, update its movement
