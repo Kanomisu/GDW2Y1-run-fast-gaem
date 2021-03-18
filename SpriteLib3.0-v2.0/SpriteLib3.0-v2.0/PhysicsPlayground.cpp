@@ -48,7 +48,7 @@ int PhysicsPlayground::ShootHook()
 
 	//Sets up the components
 	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 5);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
 
@@ -69,7 +69,7 @@ int PhysicsPlayground::ShootHook()
 	tempDef.position.Set(float32(playerX), float32(playerY));
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, HOOK, GROUND | ENVIRONMENT, 0.3f); //change to true later
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, HOOK, GROUND, 0.3f); //change to true later
 
 
 
@@ -83,7 +83,7 @@ int PhysicsPlayground::ShootHook()
 	float Vec1y = -1 * (playerPos.y - mouseGL.y);
 
 	float Vec1Magnitude = sqrt(pow(Vec1x, 2.0) + pow(Vec1y, 2.0));
-	float projSpeedMult = 10;
+	float projSpeedMult = 100;
 	
 	activeProjDir = b2Vec2(Vec1x/Vec1Magnitude * projSpeedMult, Vec1y/Vec1Magnitude * projSpeedMult);
 	//------------------------------
@@ -211,27 +211,32 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 
-
+	
+	
 	//Testing Sizing
 	{
+		/*
+		
 		//Creates entity
 		auto entity = ECS::CreateEntity();
 
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
+		//ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up components
 		std::string fileName = "map.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -400.f, 2.f));
 
-		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+		//auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		//auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
+		//float shrinkX = 0.f;
+		//float shrinkY = 0.f;
+
+		/*
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
@@ -240,10 +245,33 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, ENEMY | OBJECTS | HOOK);
+			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, FRIENDLY); //Do not use the variable environment
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+		*/
+		
+		
+
+
+		
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Sets up components
+		std::string fileName = "map.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
+		
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -10.f, 2.f));
+		
 
 	}
+
+	
+
 	//BEGINNING\\
 
 	/*
@@ -408,7 +436,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, PLAYER, ENVIRONMENT | ENEMY | OBJECTS | PICKUP, 1.f, 3.f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float((tempSpr.GetHeight() - shrinkY) / 2.f), vec2(0.f, 0.f), false, PLAYER, PLAYER | ENEMY | OBJECTS | HOOK, 1.f, 3.f);
 
 		tempPhsBody.SetRotationAngleDeg(0.f);
 		tempPhsBody.SetFixedRotation(true);
@@ -445,7 +473,7 @@ void PhysicsPlayground::Update()
 
 	//If the hook is in its "in flight" state, update its movement
 	
-	//ECS::GetComponent<Hook>(activeHook).Update();
+	
 	
 	//hook update
 	queueDeleteHookCheck();
@@ -541,6 +569,8 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
 	}
+
+	
 }
 
 void PhysicsPlayground::KeyboardUp()
