@@ -96,11 +96,11 @@ public:
 	void SetScene(PhysicsPlayground* scene);
 
 	PhysicsPlayground* m_currScene;
-	
+
 	//Are you currently attacking?????
 	bool m_attacking = false;
-
 private:
+
 	void SetActiveAnimation(int anim);
 
 	//Basically, any animation OTHER than moving will not have a cancel, and we'll be checking whether or not that animation is done
@@ -112,7 +112,7 @@ private:
 	bool m_locked = false;
 	bool m_dashing = false;
 	//For setting how long the player is in the dash.
-	float m_dashTime = 0.25f;
+	float m_dashTime = 1.f;
 	//For keeping track of how long a dash is
 	float m_dashTimeDelta = 0.f;
 	//How fast the player moved while dashing

@@ -20,8 +20,6 @@ public:
 	void GUIWindowOne();
 	void GUIWindowTwo();
 
-	void CheckEvent();
-
 	//Mouse Input
 	void MouseClick(SDL_MouseButtonEvent evnt);
 

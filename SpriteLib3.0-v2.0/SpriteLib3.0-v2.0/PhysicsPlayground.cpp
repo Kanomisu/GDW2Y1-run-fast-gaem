@@ -120,11 +120,11 @@ int PhysicsPlayground::Attack()
 	
 	//Sets up the components
 	std::string fileName = "boxSprite.jpg";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 80, 28);
-	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 	float pX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
 	float pY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
-	ECS::GetComponent<Transform>(entity).SetPosition(vec3(pX + 10, pY + 5, 10)); //infront of player
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(pX, pY, 10)); //infront of player
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -135,7 +135,7 @@ int PhysicsPlayground::Attack()
 	b2Body* tempBody;
 	b2BodyDef tempDef;
 	tempDef.type = b2_dynamicBody;
-	tempDef.position.Set(float32(pX + 10), float32(pY + 6));
+	tempDef.position.Set(float32(pX), float32(pY));
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -395,7 +395,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(-3700, -80, -3680, -3720);
+	SpawnEnemy(-3600, -80, -3680, -3720);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -497,14 +497,13 @@ int PhysicsPlayground::getActiveHook()
 
 void PhysicsPlayground::MouseClick(SDL_MouseButtonEvent evnt)
 {
-	ImGui::GetIO().MouseDown[0] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT));
 	ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
 
 	if (ImGui::GetIO().MouseDown[1])
 	{
 		queueHook();
 	}
-	else
+	else if(!ImGui::GetIO().MouseDown[1])
 	{
 		queueDeleteHook();
 	}
@@ -569,8 +568,12 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
 	}
-
-	
+	/* I am trying to figure this out so it's relevant with player.cpp
+	if (Input::GetKeyDown(Key::LeftControl))
+	{
+		queueAtk();
+	}
+	*/
 }
 
 void PhysicsPlayground::KeyboardUp()

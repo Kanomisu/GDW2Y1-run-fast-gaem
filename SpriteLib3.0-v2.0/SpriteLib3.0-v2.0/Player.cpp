@@ -150,11 +150,6 @@ void Player::MovementUpdate()
 			m_dashTimeDelta = m_dashTime;
 			std::cout << "Dashing" << std::endl;
 		}
-		/*if (ImGui::GetIO().MouseDown[0])
-		{
-			m_locked = true;
-			
-		}*/
 		else
 		{
 			if (Input::GetKey(Key::A))
@@ -180,7 +175,8 @@ void Player::MovementUpdate()
 		}
 		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y + jumpVel ,0.f));
 	}
-	if (m_dashing) {
+	if (m_dashing) 
+	{
 		if (m_facing == RIGHT) {
 			m_physBody->SetVelocity(vec3(m_dashSpeed, 0, 0));
 		}

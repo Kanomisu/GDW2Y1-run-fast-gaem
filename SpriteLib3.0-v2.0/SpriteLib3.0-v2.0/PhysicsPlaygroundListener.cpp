@@ -45,29 +45,28 @@ void PhysicsPlaygroundListener::BeginContact(b2Contact* contact)
 			ECS::GetComponent<CanJump>((int)fixtureB->GetBody()->GetUserData()).m_canDash = true;
 		}
 	}
-
+	
+	/* 
 	if ((filterA.categoryBits == PLAYER && filterB.categoryBits == ENEMY) || (filterB.categoryBits == PLAYER && filterA.categoryBits == ENEMY))
 	{
 		if (filterA.categoryBits == PLAYER)
 		{
-			if (ECS::GetComponent<Player>(MainEntities::MainPlayer()).m_attacking) {
-				ECS::GetComponent<Enemy>((int)fixtureB->GetBody()->GetUserData()).setDeath();
-			}
-			else {
+			ECS::GetComponent<Enemy>((int)fixtureA->GetBody()->GetUserData()).setDeath();
+			else 
+			{
 				ECS::GetComponent<Player>(MainEntities::MainPlayer()).damage();
 			}
 		}
 		else if (filterB.categoryBits == PLAYER)
 		{
-			if (ECS::GetComponent<Player>(MainEntities::MainPlayer()).m_attacking) {
-				ECS::GetComponent<Enemy>((int)fixtureA->GetBody()->GetUserData()).setDeath();
-			}
-			else {
+			ECS::GetComponent<Enemy>((int)fixtureB->GetBody()->GetUserData()).setDeath();
+			else 
+			{
 				ECS::GetComponent<Player>(MainEntities::MainPlayer()).damage();
 			}
 		}
 	}
-
+	*/ //This shit broken lmoaooooooooooo
 }
 
 void PhysicsPlaygroundListener::EndContact(b2Contact* contact)
