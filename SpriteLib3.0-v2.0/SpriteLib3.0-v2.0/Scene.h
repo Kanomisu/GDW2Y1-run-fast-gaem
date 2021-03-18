@@ -30,7 +30,7 @@ public:
 	void AdjustScrollOffset();
 	void CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 
 								float zNear, float zFar, float aspectRatio, bool vertScroll=false, bool horizScroll=false);
-	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, int vecZ = 10.f, bool isDynamic = false, float shrinkXValue = 0, float shrinkYValue = 0);
+	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, int vecZ = 1.f, bool isDynamic = false, float shrinkXValue = 0, float shrinkYValue = 0);
 	//void CreateSpriteEntity(int type, int body, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz,
 		//int posX, int posY, float movingX, float movingY, int rotDeg, EntityCategories category, int hitting, float friction, float density);
 

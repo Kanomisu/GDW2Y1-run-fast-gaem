@@ -274,20 +274,27 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//BEGINNING\\
 
-	/*
-	//Setup static Top Platform
-	CreateBoxEntity("boxSprite.jpg", 256, 16, 60.f, -20.f);
+	CreateBoxEntity("boxSprite.jpg", 128, 32, -2240.f, 234.f);
 
-	
-	//Jump over block
-	CreateBoxEntity("boxSprite.jpg", 64, 16, 196.f, 10.f, 90);
-	//Down - Left
-	CreateBoxEntity("boxSprite.jpg", 64, 16, 196.f, -50.f, 90);
-	//Down - Bottom
-	CreateBoxEntity("boxSprite.jpg", 128, 16, 268.f, -74.f);
-	*/
+	CreateBoxEntity("boxSprite.jpg", 96, 32, -2096.f, 327.f);
 
-	CreateBoxEntity("boxSprite.jpg", 128, 32, -2250.f, 232.f);
+	CreateBoxEntity("boxSprite.jpg", 192, 32, -1503.f, 646.f);
+
+	CreateBoxEntity("boxSprite.jpg", 192, 32, -224.f, -312.f);
+
+	CreateBoxEntity("boxSprite.jpg", 160, 32, 112.f, -246.f);
+
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 1518.f, -183.f);
+
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 1968.f, -217.f);
+
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 2637.f, -286.f);
+
+	CreateBoxEntity("boxSprite.jpg", 224, 32, 2830.f, -444.f);
+
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 3056.f, -408.f);
+
+
 
 	//Map entity - bottom
 	{
@@ -395,7 +402,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(-3600, -80, -3680, -3720);
+	//SpawnEnemy(-3600, -80, -3680, -3720);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
