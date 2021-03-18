@@ -134,7 +134,7 @@ void Enemy::killEnemy()
 		m_timer -= Timer::deltaTime;
 	}
 	else {
-		m_physBody->SetPosition(b2Vec2(0, -900));
+		m_physBody->SetPosition(b2Vec2(0, -9000));
 		m_physBody->GetBody()->SetAwake(false); //Schleep the body
 	}
 }
