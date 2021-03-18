@@ -29,6 +29,8 @@ public:
 	void KeyboardUp() override;
 
 	int ShootHook();
+	int ShootRope();
+	void UpdateRope();
 	
 	void SpawnEnemy(float spawnX, float spawnY, float roamA, float roamB) {
 		std::cout << "Enemy Spawned" << std::endl;
@@ -104,11 +106,17 @@ public:
 	{
 		if (m_hookDeleteQueued)
 		{
+			if (activeRope != NULL)
+			{
+				PhysicsBody::m_bodiesToDelete.push_back(activeRope);
+				activeRope = NULL;
+			}
 			if (activeHook != NULL)
 			{
 				PhysicsBody::m_bodiesToDelete.push_back(activeHook);
 				activeHook = NULL;
 			}
+			
 			m_hookDeleteQueued = false;
 		}
 	}
@@ -163,6 +171,7 @@ protected:
 
 	int playerRef;
 	int activeHook = NULL;
+	int activeRope = NULL;
 
 	vec2 m_mousePos = vec2(0.f, 0.f);
 
