@@ -112,14 +112,15 @@ private:
 	bool m_locked = false;
 	bool m_dashing = false;
 	//For setting how long the player is in the dash.
-	float m_dashTime = 1.f;
+	float m_dashTime = 0.5f;
+
 	//For keeping track of how long a dash is
 	float m_dashTimeDelta = 0.f;
 	//How fast the player moved while dashing
 	float m_dashSpeed = 100.f;
 
 	float m_jumpHeight = 80000.f;
-
+	
 
 	//Player's speed.
 	float m_playerSpeed = 10.f;
