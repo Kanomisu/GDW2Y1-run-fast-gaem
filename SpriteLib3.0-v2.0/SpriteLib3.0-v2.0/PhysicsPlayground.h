@@ -104,7 +104,10 @@ public:
 		{
 			if (activeRope != NULL)
 			{
-				PhysicsBody::m_bodiesToDelete.push_back(activeRope);
+				
+
+				ECS::DestroyEntity(activeRope);
+
 				activeRope = NULL;
 			}
 			if (activeHook != NULL)
