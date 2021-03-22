@@ -155,6 +155,9 @@ void PhysicsPlayground::UpdateRope()
 	//lastly scale the ropes x value based on the length of the magnitude of the vec3 we made from the differneces.
 	ECS::GetComponent<Sprite>(activeRope).SetWidth(temp.Length());
 
+	//set rope location to the center of the hypotenuse
+	ECS::GetComponent<Transform>(activeRope).SetPosition(playerPos.x + (xDiff * 0.5), playerPos.y + (yDiff * 0.5), playerPos.z);
+
 
 }
 
