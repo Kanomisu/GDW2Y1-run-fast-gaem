@@ -147,8 +147,14 @@ void PhysicsPlayground::UpdateRope()
 	b2Vec2 temp = b2Vec2(xDiff, yDiff);
 	//find the angle between a b2vec2 made from the two differences and vec2(1,0), rotate the rope by that angle
 	//cos(angleBetween) = u dot v / magnitude of u * magnitude of v
-
+	
 	float angleBetween = acos(((temp.x * 1 + temp.y * 0) / (temp.Length() * 1)));
+
+	if (yDiff < 0) //if the angle is in q3 or q4, we need to rotate cw instead of ccw because of how SetRotationAngleZ automatically rotates ccw from (1,0) 
+	{
+		angleBetween *= -1;
+	}
+	
 
 	ECS::GetComponent<Transform>(activeRope).SetRotationAngleZ(angleBetween);
 
