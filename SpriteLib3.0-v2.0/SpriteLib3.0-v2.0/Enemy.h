@@ -19,12 +19,14 @@ private:
 
 	unsigned int m_entityID;
 
+	bool m_dead = false;
+
 	bool m_awake = false;
 
 	//Variables  
 	float m_speed = 10.f;
 	float m_attackSpeed = 100.f;
-	float m_engagementRange = 20.f;
+	float m_engagementRange = 200.f;
 
 	//States  
 	int m_state = THINKING;
@@ -33,7 +35,7 @@ private:
 	float m_attackLength = 0.7f;
 	float m_deathTimer = 1.24f; //Set this to the length of the death animation.
 	float m_moveCooldown = 1.0f;
-	float m_awakenDistance = 50.f;
+	float m_awakenDistance = 400.f;
 
 	//Positions  
 	float posLeft = 0.f;
