@@ -1,7 +1,7 @@
 #include "Enemy.h"  
 #include "Utilities.h"
 
-void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
+void Enemy::Init(std::string& fileName, std::string& animJSON, int width, int height, Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
 	m_sprite = sprite;
 	m_animationController = animCon;
 	m_transform = transform;
@@ -11,7 +11,41 @@ void Enemy::Init(Sprite* sprite, AnimationController* animCon, Transform* transf
 	posRight = rightXStation;
 
 	m_entityID = ent;
-	m_physBody->GetBody()->SetAwake(false); //In this line, make it so that the Physics are asleep.
+	
+
+	//Initialize UVs
+	m_animationController->InitUVs(fileName);
+
+	//Loads the texture and sets width and height
+	m_sprite->LoadSprite(fileName, width, height, true, m_animationController);
+	m_animationController->SetVAO(m_sprite->GetVAO());
+	m_animationController->SetTextureSize(m_sprite->GetTextureSize());
+
+	//Loads in the animations json file
+	nlohmann::json animations = File::LoadJSON(animJSON);
+
+	//IDLE ANIMATIONS\\
+
+	//Idle Left
+	m_animationController->AddAnimation(animations["IdleLeft"].get<Animation>());
+	//Idle Right
+	m_animationController->AddAnimation(animations["IdleRight"].get<Animation>());
+
+	//Moving Animations\\
+
+	//MoveLeft
+	m_animationController->AddAnimation(animations["MoveLeft"].get<Animation>());
+	//MoveRight
+	m_animationController->AddAnimation(animations["MoveRight"].get<Animation>());
+
+	//Death Animations\\
+
+	//DeathLeft
+	m_animationController->AddAnimation(animations["DeathLeft"].get<Animation>());
+	//DeathRight
+	m_animationController->AddAnimation(animations["DeathRight"].get<Animation>());
+
+	//m_physBody->GetBody()->SetAwake(false); //In this line, make it so that the Physics are asleep.
 }
 
 void Enemy::Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent) {
@@ -88,8 +122,11 @@ void Enemy::moveLeft()
 	else {
 		m_physBody->SetVelocity(vec3(0, 0, 0));
 		m_state = THINKING;
+		m_facing = left;
 		m_timer = m_moveCooldown;
 	}
+	m_facing = left;
+	m_AnimState = MOVING;
 }
 
 void Enemy::moveRight()
@@ -99,23 +136,39 @@ void Enemy::moveRight()
 	}
 	else {
 		m_state = THINKING;
+		m_facing = right;
 		m_timer = m_moveCooldown;
 	}
+	m_facing = right;
+	m_AnimState = MOVING;
 }
 
 void Enemy::attack()
 {
+	m_physBody = &ECS::GetComponent<PhysicsBody>(m_entityID);
 	if (m_timer > 0) {
 		vec2 EtoP = vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - m_physBody->GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y - m_physBody->GetPosition().y);
 		double EtoPAngle = atan2(EtoP.x, EtoP.y) * 57.29577951308 * -1;
 		vec3 movement = vec3(m_attackSpeed * sin(-EtoPAngle * 0.01745329f), m_attackSpeed * cos(-EtoPAngle * 0.01745329f), 0);
 		m_physBody->SetVelocity(movement);
 		m_timer -= Timer::deltaTime;
+
+		//This sets the enemies direction correctly when they're attacking (animation-wise anyways)
+		if (m_physBody->GetVelocity().x > 0)
+		{
+			m_facing = right;
+		}
+		else if (m_physBody->GetVelocity().x < 0)
+		{
+			m_facing = left;
+		}
+
 	}
 	else {
 		m_state = THINKING;
 		m_timer = m_attackCooldown;
 	}
+	m_AnimState = MOVING;
 }
 
 void Enemy::thinking()
@@ -137,6 +190,7 @@ void Enemy::thinking()
 			m_state = MOVELEFT;
 		}
 	}
+	m_AnimState = Idle;
 
 }
 
@@ -145,6 +199,7 @@ void Enemy::killEnemy()
 	if (m_timer > 0) {
 		//Animate the enemy dying 
 		m_timer -= Timer::deltaTime;
+		m_AnimState = DYING;
 	}
 	else {
 		m_dead = true;
@@ -158,4 +213,26 @@ void Enemy::setDeath()
 {
 	m_state = DAMAGED;
 	m_timer = m_deathTimer;
+}
+
+
+void Enemy::AnimationUpdate()
+{
+	m_animationController = &ECS::GetComponent<AnimationController>(m_entityID);
+	int activeAnimation = 0;
+	if (m_AnimState == DYING)
+	{
+		activeAnimation = DYING;
+		if (m_animationController->GetAnimation(m_animationController->GetActiveAnim()).GetAnimationDone())
+		{
+			activeAnimation = Idle;
+		}
+	}
+	activeAnimation = m_AnimState;
+	SetActiveAnimation(activeAnimation + (int)m_facing);
+}
+
+void Enemy::SetActiveAnimation(int anim)
+{
+	m_animationController->SetActiveAnim(anim);
 }
