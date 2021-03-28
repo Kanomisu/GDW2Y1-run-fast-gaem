@@ -7,8 +7,34 @@ enum States {
 	MOVERIGHT,
 	ATTACKING,
 	THINKING,
-	DAMAGED,
+	DAMAGED
 };
+//ngl i kinda hate you for doing this but whatever
+//All the enums for this are specifically for animations
+enum animStates {
+	Idle = 0,
+	MOVING = 2,
+	DYING = 4
+};
+enum AnimDirE
+{
+	left,
+	right
+};
+/*
+enum AnimEnums
+{
+	IDLELEFT,
+	IDLERIGHT,
+
+	MOVINGLEFT,
+	MOVINGRIGHT,
+
+	DEATHLEFT,
+	DEATHRIGHT
+};
+*/
+
 class Enemy
 {
 private:
@@ -30,6 +56,7 @@ private:
 
 	//States  
 	int m_state = THINKING;
+	int m_AnimState = Idle;
 	float m_timer = 0; //Used to timed behaviours  
 	float m_attackCooldown = 0.8f;
 	float m_attackLength = 0.7f;
@@ -40,8 +67,13 @@ private:
 	//Positions  
 	float posLeft = 0.f;
 	float posRight = 0.f;
+
+	void SetActiveAnimation(int anim);
+
+	//Default animation direction
+	AnimDirE m_facing = right;
 public:
-	void Init(Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent);
+	void Init(std::string& fileName, std::string& animations, int width, int height, Sprite* sprite, AnimationController* animCon, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent);
 	void Init(Sprite* sprite, Transform* transform, PhysicsBody* physBody, float leftXStation, float rightXStation, unsigned int ent); //Testing ONLY, do not use
 	void Update();
 
@@ -56,4 +88,5 @@ public:
 	//Dying  
 	void killEnemy();
 	void setDeath();
+	void AnimationUpdate();
 };
