@@ -44,13 +44,110 @@ void TitleScreen::InitScene(float windowWidth, float windowHeight)
 	}
 
 	CreateBoxEntity("TitleScreen.png", 576, 325, 0.f, 0.f, 0, 2);
-	CreateBoxEntity("start.png", 75, 49.875, -135.f, 0.f, 0, 3.f);
-	CreateBoxEntity("credits.png", 75, 49.875, -135.f, -49.875, 0, 3.f);
-	CreateBoxEntity("exit.png", 75, 49.875, -135.f, -99.75, 0, 3.f);
+	CreateDecoration("start.png", 75, 49.875, -135.f, 0.f, 3.f);
+	CreateDecoration("credits.png", 75, 49.875, -135.f, -49.875, 3.f);
+	CreateDecoration("exit.png", 75, 49.875, -135.f, -99.75, 3.f);
+
+	//Loading Screen
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsMainLoading(entity, true);
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "loading.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 576, 325);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(2000.f, 2000.f, 10.f));
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(2000.f), float32(2000.f));
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - 0.f), float(tempSpr.GetHeight() - 0.f), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
+
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	}
+
+	//Credits Screen
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsMainCredits(entity, true);
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "credit.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 576, 325);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(2000.f, 2000.f, 10.f));
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(2000.f), float32(2000.f));
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - 0.f), float(tempSpr.GetHeight() - 0.f), vec2(0.f, 0.f), false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
+
+		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	}
 }
 
 void TitleScreen::Update()
 {
+	auto& loading = ECS::GetComponent<PhysicsBody>(MainEntities::MainLoading());
+	auto& credits = ECS::GetComponent<PhysicsBody>(MainEntities::MainCredits());
+	ImGui::GetIO().MouseDown[2] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
+
+	if (play)
+	{
+		if (timer > 0)
+		{
+			loading.SetPosition(b2Vec2(0, 0), true);
+			timer -= Timer::deltaTime;
+		}
+		else
+		{
+			setScene = true;
+		}
+	}
+	
+	if (setScene)
+	{
+		sceneNum = 1;
+	}
+
+	if (displayCredits)
+	{
+		credits.SetPosition(b2Vec2(0, 0), true);
+		if (inputCredits)
+		{
+			if (ImGui::GetIO().MouseDown[2])
+			{
+				credits.SetPosition(b2Vec2(2000, 2000), true);
+				displayCredits = false;
+				inputCredits = false;
+				menu = true;
+			}
+		}
+	}
+
 	/*
 	float dx = m_mousePos.x;
 	float dy = m_mousePos.y;
@@ -64,21 +161,27 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 	float dy = m_mousePos.y;
 	ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT));
 
-	if (ImGui::GetIO().MouseDown[1] && (dx >= -165.f && dx <= -105.f) && (dy >= -10 && dy <= 10))
+	if (menu)
 	{
-		std::cout << "Starting game!" << std::endl;
-
-		sceneNum = 1;
-	}
-	if (ImGui::GetIO().MouseDown[1] && (dx >= -170.f && dx <= -100.f) && (dy >= -60 && dy <= -40))
-	{
-		std::cout << "Credits!" << std::endl;
-
-	}
-	if (ImGui::GetIO().MouseDown[1] && (dx >= -155.f && dx <= -95.f) && (dy >= -110 && dy <= -90))
-	{
-		std::cout << "Thank you for playing!" << std::endl;
-		exit(0);
+		if (ImGui::GetIO().MouseDown[1] && (dx >= -165.f && dx <= -105.f) && (dy >= -10 && dy <= 10))
+		{
+			std::cout << "Starting game!" << std::endl;
+			timer = 1.f;
+			menu = false;
+			play = true;
+		}
+		if (ImGui::GetIO().MouseDown[1] && (dx >= -170.f && dx <= -100.f) && (dy >= -60 && dy <= -40))
+		{
+			std::cout << "Credits!" << std::endl;
+			menu = false;
+			displayCredits = true;
+			inputCredits = true;
+		}
+		if (ImGui::GetIO().MouseDown[1] && (dx >= -155.f && dx <= -95.f) && (dy >= -110 && dy <= -90))
+		{
+			std::cout << "Thank you for playing!" << std::endl;
+			exit(0);
+		}
 	}
 }
 

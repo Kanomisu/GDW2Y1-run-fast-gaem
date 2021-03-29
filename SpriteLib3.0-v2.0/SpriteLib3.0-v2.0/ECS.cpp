@@ -47,3 +47,19 @@ void ECS::SetIsMainPlayer(unsigned entity, bool mainPlayer)
 		MainEntities::MainPlayer(entity);
 	}
 }
+
+void ECS::SetIsMainLoading(unsigned entity, bool mainLoading)
+{
+	if (mainLoading)
+	{
+		MainEntities::MainLoading(entity);
+	}
+}
+
+void ECS::SetIsMainCredits(unsigned entity, bool mainCredits)
+{
+	if (mainCredits)
+	{
+		MainEntities::MainCredits(entity);
+	}
+}
