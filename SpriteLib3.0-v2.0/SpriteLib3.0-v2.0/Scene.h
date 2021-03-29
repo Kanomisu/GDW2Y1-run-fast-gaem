@@ -57,7 +57,10 @@ public:
 	entt::registry* GetScene() const;
 	//Set the scene registry
 	void SetScene(entt::registry& scene);
-
+	int ChangeScene()
+	{
+		return sceneNum;
+	}
 	//Gets the background color of the scene
 	vec4 GetClearColor() const;
 	//Sets the background color of the scene
@@ -82,7 +85,7 @@ public:
 protected:
 	b2World* m_physicsWorld = nullptr;
 	b2Vec2 m_gravity = b2Vec2(float32(0.f), float32(0.f));
-
+	int sceneNum = -1;
 	vec4 m_clearColor = vec4(0.15f, 0.33f, 0.58f, 1.f);
 
 	entt::registry* m_sceneReg = nullptr;	
