@@ -46,12 +46,13 @@ void PhysicsPlaygroundListener::BeginContact(b2Contact* contact)
 		}
 	}
 	
-	/* 
 	if ((filterA.categoryBits == PLAYER && filterB.categoryBits == ENEMY) || (filterB.categoryBits == PLAYER && filterA.categoryBits == ENEMY))
 	{
 		if (filterA.categoryBits == PLAYER)
 		{
-			ECS::GetComponent<Enemy>((int)fixtureA->GetBody()->GetUserData()).setDeath();
+			if (ECS::GetComponent<Player>(MainEntities::MainPlayer()).m_dashing) {
+				ECS::GetComponent<Enemy>((int)fixtureB->GetBody()->GetUserData()).setDeath();
+			}
 			else 
 			{
 				ECS::GetComponent<Player>(MainEntities::MainPlayer()).damage();
@@ -59,14 +60,15 @@ void PhysicsPlaygroundListener::BeginContact(b2Contact* contact)
 		}
 		else if (filterB.categoryBits == PLAYER)
 		{
-			ECS::GetComponent<Enemy>((int)fixtureB->GetBody()->GetUserData()).setDeath();
-			else 
+			if (ECS::GetComponent<Player>(MainEntities::MainPlayer()).m_dashing) {
+				ECS::GetComponent<Enemy>((int)fixtureA->GetBody()->GetUserData()).setDeath();
+			}
+			else
 			{
 				ECS::GetComponent<Player>(MainEntities::MainPlayer()).damage();
 			}
 		}
 	}
-	*/ //This shit broken lmoaooooooooooo
 }
 
 void PhysicsPlaygroundListener::EndContact(b2Contact* contact)

@@ -99,6 +99,7 @@ public:
 
 	//Are you currently attacking?????
 	bool m_attacking = false;
+	bool m_dashing = false;
 private:
 
 	void SetActiveAnimation(int anim);
@@ -110,7 +111,7 @@ private:
 	bool m_jumping = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
-	bool m_dashing = false;
+	
 	//For setting how long the player is in the dash.
 	float m_dashTime = 0.5f;
 
