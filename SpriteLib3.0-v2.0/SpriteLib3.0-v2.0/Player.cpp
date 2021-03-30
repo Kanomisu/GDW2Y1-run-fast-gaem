@@ -173,7 +173,14 @@ void Player::MovementUpdate()
 				m_canJump->m_canJump = false;
 			}
 		}
-		m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y + jumpVel ,0.f));
+		if (m_physBody->GetVelocity().y != 0 && vel == 0.f)
+		{
+			m_physBody->SetVelocity(vec3(m_physBody->GetVelocity().x, m_physBody->GetVelocity().y + jumpVel, 0.f));
+		}
+		else
+		{
+			m_physBody->SetVelocity(vec3(vel * m_playerSpeed * airSpeedMultiplier, m_physBody->GetVelocity().y + jumpVel, 0.f));
+		}
 	}
 	if (m_dashing) 
 	{
@@ -286,11 +293,12 @@ void Player::PlayerSpeedLevel()
 		//std::cout << "Key Pressed" << std::endl;
 	}
 	if (Input::GetKeyDown(Key::L)) {
-		m_playerSpeed = 60.f;
-		//std::cout << "Key Pressed" << std::endl;
+		m_playerSpeed = 70.f;
+		std::cout << "Key Pressed" << std::endl;
 	}
 
 	//In Case this doesn't feel good, we can specify the player speed here.
+	//The fuck is this?
 	/*
 	m_playerSpeed = 10 * 2 ^ (level - 1);
 	switch (level) {
