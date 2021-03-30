@@ -148,7 +148,7 @@ void Player::MovementUpdate()
 			m_canJump->m_canDash = false;
 			m_dashing = true;
 			m_dashTimeDelta = m_dashTime;
-			std::cout << "Dashing" << std::endl;
+			//std::cout << "Dashing" << std::endl;
 		}
 		else
 		{
@@ -275,19 +275,19 @@ void Player::PlayerSpeedLevel()
 	//int level = 1;
 	if (Input::GetKeyDown(Key::U)) {
 		m_playerSpeed = 10.f;
-		std::cout << "Key Pressed" << std::endl;
+		//std::cout << "Key Pressed" << std::endl;
 	}
 	if (Input::GetKeyDown(Key::I)) {
 		m_playerSpeed = 20.f;
-		std::cout << "Key Pressed" << std::endl;
+		//std::cout << "Key Pressed" << std::endl;
 	}
 	if (Input::GetKeyDown(Key::O)) {
 		m_playerSpeed = 40.f;
-		std::cout << "Key Pressed" << std::endl;
+		//std::cout << "Key Pressed" << std::endl;
 	}
 	if (Input::GetKeyDown(Key::L)) {
 		m_playerSpeed = 60.f;
-		std::cout << "Key Pressed" << std::endl;
+		//std::cout << "Key Pressed" << std::endl;
 	}
 
 	//In Case this doesn't feel good, we can specify the player speed here.
@@ -309,7 +309,7 @@ void Player::PlayerSpeedLevel()
 
 void Player::damage()
 {
-	//Damage the player.
+	std::cout << "Damaging Player" << std::endl;
 }
 
 void Player::SetActiveAnimation(int anim)

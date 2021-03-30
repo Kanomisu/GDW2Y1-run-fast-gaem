@@ -81,7 +81,7 @@ void Enemy::Update()
 			m_physBody->GetBody()->SetAwake(true); //Awaken the Physics Body
 		}
 		else {
-			std::cout << "SUS" << std::endl;
+			//std::cout << "SUS" << std::endl;
 			m_awake = false;
 			m_physBody->GetBody()->SetAwake(false); //Schleep the MF Phys Body
 		}
@@ -90,23 +90,23 @@ void Enemy::Update()
 			//Check which behaviour needs to be updated.  
 			switch (m_state) {
 			case DAMAGED:
-				std::cout << "Damaged" << std::endl;
+				//std::cout << "Damaged" << std::endl;
 				killEnemy();
 				break;
 			case THINKING:
-				std::cout << "Big Thonk" << std::endl;
+				//std::cout << "Big Thonk" << std::endl;
 				thinking();
 				break;
 			case MOVELEFT:
-				std::cout << "Patrol Left" << std::endl;
+				//std::cout << "Patrol Left" << std::endl;
 				moveLeft();
 				break;
 			case MOVERIGHT:
-				std::cout << "Patrol Right" << std::endl;
+				//std::cout << "Patrol Right" << std::endl;
 				moveRight();
 				break;
 			case ATTACKING:
-				std::cout << "Attacking" << std::endl;
+				//std::cout << "Attacking" << std::endl;
 				attack();
 				break;
 			}
@@ -178,7 +178,7 @@ void Enemy::thinking()
 	}
 	else {
 		vec2 dToP = vec2(ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().x - m_physBody->GetPosition().x, ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetPosition().y - m_physBody->GetPosition().y);
-		std::cout << "Distance to Player: " << dToP.GetMagnitude() << std::endl;
+		//std::cout << "Distance to Player: " << dToP.GetMagnitude() << std::endl;
 		if (dToP.GetMagnitude() < m_engagementRange) {
 			m_state = ATTACKING;
 			m_timer = m_attackLength;
