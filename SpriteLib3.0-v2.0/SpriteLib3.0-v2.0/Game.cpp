@@ -2,6 +2,7 @@
 
 #include <random>
 #include "TestScene.h"
+#include "TitleScreen.h"
 
 Game::~Game()
 {
@@ -40,8 +41,8 @@ void Game::InitGame()
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
 	m_scenes.push_back(p);
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
+	m_scenes.push_back(new TitleScreen("Project Flow")); //main menu aka title screen
 	m_scenes.push_back(new TestScene("Test Scene sexy baby"));
-	 
 	//Sets active scene reference to our scene
 	m_activeScene = m_scenes[1]; 
 	//m_activeScene = m_scenes[3]; //TEST SCENE
@@ -102,6 +103,20 @@ void Game::Update()
 
 	//Update Physics System
 	PhysicsSystem::Update(m_register, m_activeScene->GetPhysicsWorld());
+
+	unsigned int index = m_activeScene->ChangeScene();
+	if (index != -1)
+	{
+		m_activeScene->Unload();
+
+		m_activeScene = m_scenes[index];
+
+		m_activeScene->InitScene(float(BackEnd::GetWindowWidth()), float(BackEnd::GetWindowHeight()));
+		m_register = m_activeScene->GetScene();
+
+		BackEnd::SetWindowName(m_activeScene->GetName());
+		PhysicsSystem::Init();
+	}
 
 	//Updates the active scene
 	m_activeScene->Update();
