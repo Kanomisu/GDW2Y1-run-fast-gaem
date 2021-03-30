@@ -121,8 +121,8 @@ void TestScene::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "map.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -400.f, 2.f));
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10775, 2308);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1579.5f, -10.f, 2.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -132,7 +132,7 @@ void TestScene::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(30.f), float32(-10.f));
+		tempDef.position.Set(float32(1579.5f), float32(-10.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 

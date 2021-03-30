@@ -124,7 +124,7 @@ private:
 	
 
 	//Player's speed.
-	float m_playerSpeed = 10.f;
+	float m_playerSpeed = 70.f;
 	//Player's previous momentum
 
 	//A reference to our sprite

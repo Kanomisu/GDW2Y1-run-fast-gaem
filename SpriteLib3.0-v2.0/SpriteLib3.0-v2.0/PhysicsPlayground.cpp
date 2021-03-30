@@ -263,9 +263,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Sets up components
 		std::string fileName = "map.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10775, 2308);
 		
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -10.f, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(1579.5f, -10.f, 2.f));
 		
 
 	}
@@ -294,6 +294,18 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	CreateBoxEntity("boxSprite.jpg", 96, 32, 3056.f, -408.f);
 
+
+	//PART 2\\
+
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4332.f, -440.f);
+
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 4591.f, -407.f);
+
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4800.f, -471.f);
+
+	CreateBoxEntity("boxSprite.jpg", 128, 32, 5025.f, -406.f);
+
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 6111.f, 73.f);
 
 
 	//Map entity - bottom
@@ -393,6 +405,97 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Vec2(417, 854), b2Vec2(417, 918), b2Vec2(161, 918), b2Vec2(161, 949), b2Vec2(35, 949),
 		b2Vec2(35, 923)
 		};
+
+
+
+		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
+
+		tempPhsBody.SetRotationAngleDeg(0.f);
+		tempPhsBody.SetFixedRotation(true);
+
+	}
+
+	//Map entity PT 2 - Bottom
+	{
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		//ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		//ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up the components
+		std::string fileName = "map.png";
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
+		//ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(0.f), float32(0.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+		//points lul
+		std::vector<b2Vec2> points = {
+		b2Vec2(3617, -773), b2Vec2(3808, -773), b2Vec2(3808, -359), b2Vec2(3904, -359), b2Vec2(3904, -775),
+		b2Vec2(4031, -775), b2Vec2(4031, -488), b2Vec2(4191, -488), b2Vec2(4191, -773), b2Vec2(5216, -773),
+		b2Vec2(5216, -328), b2Vec2(5505, -328), b2Vec2(5505, -295), b2Vec2(5632, -295), b2Vec2(5632, -775),
+		b2Vec2(5698, -775), b2Vec2(5698, -265), b2Vec2(6272, -265), b2Vec2(6272, -36), b2Vec2(5826, -36),
+		b2Vec2(5826, -7), b2Vec2(6241, -7), b2Vec2(6241, 118), b2Vec2(6433, 118), b2Vec2(6433, -776),
+		b2Vec2(6592, -776), b2Vec2(6592, 57), b2Vec2(6911, 57), b2Vec2(6911, -775), b2Vec2(6911, -840),
+		b2Vec2(3618, -840)
+		};
+
+
+
+		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
+
+		tempPhsBody.SetRotationAngleDeg(0.f);
+		tempPhsBody.SetFixedRotation(true);
+
+	}
+
+
+
+	//Map entity PT 2 - Top
+	{
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		//ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		//ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up the components
+		std::string fileName = "map.png";
+		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
+		//ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+
+
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(0.f), float32(0.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+		//points lul
+		std::vector<b2Vec2> points = {
+		b2Vec2(5409, 185), b2Vec2(5698, 185), b2Vec2(5698, -167), b2Vec2(6178, -167), b2Vec2(6178, -104),
+		b2Vec2(5730, -104), b2Vec2(5730, 281), b2Vec2(6210, 281), b2Vec2(6210, 216), b2Vec2(6401, 216),
+		b2Vec2(6401, 310), b2Vec2(5696, 310), b2Vec2(5696, 218), b2Vec2(5410, 218)
+		};
+
 
 
 
@@ -557,11 +660,11 @@ void PhysicsPlayground::KeyboardHold()
 	
 	if (Input::GetKey(Key::A))
 	{
-		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
+		player.GetBody()->ApplyForceToCenter(b2Vec2(-300000.f * speed, 0.f), true);
 	}
 	if (Input::GetKey(Key::D))
 	{
-		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
+		player.GetBody()->ApplyForceToCenter(b2Vec2(300000.f * speed, 0.f), true);
 	}
 	
 }
