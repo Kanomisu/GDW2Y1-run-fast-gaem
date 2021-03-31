@@ -145,6 +145,15 @@ private:
 
 	//Default animation direction (feel free to change this to suit your game. If you're making a side-scroller, left or right would be better
 	AnimDir m_facing = RIGHT;
+
+	//HEALTH SHITZ
+	bool m_dying = false;
+	bool m_damaged = false;
+	int m_health = 3; // Three Hits and then https://www.youtube.com/watch?v=ovkC8Eb_7mE
+	float m_hitStunTimer = 0.00f;
+	float hitStunLength = 1.0f;
+	void kill();
+
 };
 
 #endif // !__PLAYER_H__
