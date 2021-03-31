@@ -140,6 +140,16 @@ void Player::MovementUpdate()
 	if (m_canJump->m_canJump) {
 		airSpeedMultiplier = 1.f;
 	}
+	if (m_locked) {
+		if (m_hitStunTimer <= 0 && m_damaged) {
+			m_locked = false;
+			m_damaged = false;
+			//std::cout << "Control" << std::endl;
+		}
+		else {
+			m_hitStunTimer -= Timer::deltaTime;
+		}
+	}
 	if (!m_locked) //Checks if the player should be able to control their character
 	{
 		if (Input::GetKeyDown(Key::LeftControl) && m_canJump->m_canDash)
@@ -317,12 +327,30 @@ void Player::PlayerSpeedLevel()
 
 void Player::damage()
 {
-	std::cout << "Damaging Player" << std::endl;
+	//std::cout << "Health before: " << m_health << std::endl;
+	if (m_health > 0 && !m_damaged && !m_dying) {
+		m_locked = true;
+		m_damaged = true;
+		m_hitStunTimer = hitStunLength;
+		//Anim to damaged anim 
+		m_health -= 1;
+	}
+	else {
+		m_dying = true;
+		m_locked = true;
+		kill();
+	}
+	//std::cout << "Health after: " << m_health << std::endl;
 }
 
 void Player::SetActiveAnimation(int anim)
 {
 	m_animController->SetActiveAnim(anim);
+}
+
+void Player::kill()
+{
+	std::cout << "Dead Bruh" << std::endl;
 }
 
 
