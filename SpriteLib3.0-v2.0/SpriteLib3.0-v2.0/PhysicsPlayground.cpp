@@ -1,12 +1,17 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "Hook.h"
+#include "checkpointTrigger.h"
+#include "DeathTrigger.h"
 #include <cmath> //pow and sqrt
 #include <math.h> //trig
 #include <random>
 
 int playerX = 0;
 int playerY = 0;
+
+
+b2Vec2 respawnLocation = b2Vec2(-3700.f, -80.f);
 
 b2Vec2 activeProjDir;
 b2Vec2 attackPath;
@@ -504,6 +509,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
+	//SpawnEnemy(-3600, -80, -3680, -3720);
+	makeCheckpoint(b2Vec2(-3600, -80));
+	makeCheckpoint(b2Vec2(-3400, -80));
+	makeDeathPlane(b2Vec2(-3900, -150));
 
 	//Map entity PT 2 - Bottom
 	{
@@ -701,6 +710,103 @@ void PhysicsPlayground::Update()
 	}
 }
 
+void PhysicsPlayground::respawnPlayer()
+{
+	ECS::GetComponent<PhysicsBody>(playerRef).SetPosition(respawnLocation, true);
+}
+
+void PhysicsPlayground::setRespawn(b2Vec2 loc)
+{
+	respawnLocation = loc;
+}
+
+int PhysicsPlayground::makeDeathPlane(b2Vec2 location)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = "boxSprite.jpg";
+	float fileX = 300;
+	float fileY = 25;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 2.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new DeathTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((DeathTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+
+
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(location.x), float32(location.y));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, fileX, fileY, vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
+}
+
+int PhysicsPlayground::makeCheckpoint(b2Vec2 location)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = "boxSprite.jpg";
+	float fileX = 25;
+	float fileY = 25;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 4.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new checkpointTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((checkpointTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+	((checkpointTrigger*)ECS::GetComponent<Trigger*>(entity))->setRespawn(b2Vec2(location.x, location.y + 20)); //respawn location is set to where the checkpoint is
+
+
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(location.x), float32(location.y));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, fileX, fileY, vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
+}
+
 int PhysicsPlayground::getActiveHook()
 {
 	return activeHook;
@@ -778,6 +884,10 @@ void PhysicsPlayground::KeyboardDown()
 	if (Input::GetKeyDown(Key::T))
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
+	}
+	if (Input::GetKeyDown(Key::R))
+	{
+		respawnPlayer();
 	}
 	/* I am trying to figure this out so it's relevant with player.cpp
 	if (Input::GetKeyDown(Key::LeftControl))
