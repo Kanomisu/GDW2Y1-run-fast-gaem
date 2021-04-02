@@ -17,14 +17,11 @@ void checkpointTrigger::OnEnter()
 	if (!triggered)
 	{
 
-		//currentScene->setSpawn(respawn);
+		currentScene->setRespawn(respawn);
 		
 		triggered = true;
 	}
 
-	//Find out whats touching the portal, add it to target entities
-	//I wish I had a method that returned what entity is touching the object
-	//Change location of target entity
 
 }
 void checkpointTrigger::OnExit() // literally do nothing
@@ -32,7 +29,7 @@ void checkpointTrigger::OnExit() // literally do nothing
 
 	Trigger::OnExit();
 	triggered = false;
-	EffectManager::RemoveEffect(effect);
+	
 }
 
 void checkpointTrigger::SetScene(PhysicsPlayground* scene)

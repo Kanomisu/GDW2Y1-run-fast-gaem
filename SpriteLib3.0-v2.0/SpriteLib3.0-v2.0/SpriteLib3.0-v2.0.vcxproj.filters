@@ -64,6 +64,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
     <ClCompile Include="checkpointTrigger.cpp" />
+    <ClCompile Include="DeathTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
@@ -131,5 +132,6 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xinput.h" />
     <ClInclude Include="checkpointTrigger.h" />
+    <ClInclude Include="DeathTrigger.h" />
   </ItemGroup>
 </Project>
