@@ -166,6 +166,10 @@ public:
 	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
 	void MousePress(SDL_MouseMotionEvent event);
+	void respawnPlayer();
+	void setRespawn(b2Vec2);
+	int makeCheckpoint(b2Vec2);
+	int makeDeathPlane(b2Vec2);
 
 protected:
 	bool m_hookDeleteQueued = false;
