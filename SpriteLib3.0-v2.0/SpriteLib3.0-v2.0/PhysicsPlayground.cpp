@@ -297,7 +297,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//PART 2\\
 
-	CreateBoxEntity("boxSprite.jpg", 64, 32, 4332.f, -440.f);
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4352.f, -440.f); //gay ass
 
 	CreateBoxEntity("boxSprite.jpg", 96, 32, 4591.f, -407.f);
 
@@ -505,7 +505,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(-3600, -80, -3680, -3720);
+	//SpawnEnemy(-3600, -80, -3680, -3720);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
