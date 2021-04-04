@@ -353,5 +353,8 @@ void Player::kill()
 	std::cout << "Dead Bruh" << std::endl;
 }
 
-
+int Player::GetHealth()
+{
+	return m_health;
+}
 

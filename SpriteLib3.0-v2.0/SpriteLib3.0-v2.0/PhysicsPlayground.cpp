@@ -210,7 +210,29 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	//Setup the Health HUD
+	{
+		//Creates entity 
 
+		auto entity = ECS::CreateEntity();
+		auto& Cam = ECS::GetComponent<Camera>(MainEntities::MainCamera());
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<Health>(entity);
+
+		//Sets up the components
+		std::string fileName = "spritesheets/Health.png";
+		std::string animationJSON = "Health.json";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x - 200, Cam.GetPosition().y + 200, 10.f));
+
+		ECS::GetComponent<Health>(entity).InitHealth(fileName, animationJSON, 128, 64, entity);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		healthHUD = entity;
+
+	}
 	
 	
 	//Testing Sizing
@@ -297,7 +319,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//PART 2\\
 
-	CreateBoxEntity("boxSprite.jpg", 64, 32, 4332.f, -440.f);
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4352.f, -440.f); //gay ass
 
 	CreateBoxEntity("boxSprite.jpg", 96, 32, 4591.f, -407.f);
 
@@ -505,7 +527,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(-3600, -80, -3680, -3720);
+	//SpawnEnemy(-3600, -80, -3680, -3720);
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -575,7 +597,7 @@ void PhysicsPlayground::Update()
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 
 	ECS::GetComponent<Background>(background).update();
-
+	ECS::GetComponent<Health>(healthHUD).update(MainEntities::MainPlayer());
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();

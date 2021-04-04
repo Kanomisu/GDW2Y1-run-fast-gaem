@@ -14,7 +14,9 @@
 #include "MainEntities.h"
 #include "Scenes.h"
 #include "UI.h"
+
 #include "Background.h"
+#include "Health.h"
 
 //Mouse Motion event
 typedef SDL_MouseMotionEvent MotionEvent;
