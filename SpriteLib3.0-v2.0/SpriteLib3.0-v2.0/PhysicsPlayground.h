@@ -181,7 +181,7 @@ protected:
 	std::vector <unsigned int> enemyEnts = {};
 
 	int background = 1;
-
+	int healthHUD = 2;
 	unsigned int backgroundID;
 
 	int puzzleWall1;

@@ -64,6 +64,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
+    <ClCompile Include="Health.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
@@ -131,5 +132,6 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xinput.h" />
     <ClInclude Include="TitleScreen.h" />
+    <ClInclude Include="Health.h" />
   </ItemGroup>
 </Project>

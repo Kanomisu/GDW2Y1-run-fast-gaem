@@ -15,8 +15,11 @@
 #include "HorizontalScroll.h"
 #include "CanJump.h"
 #include "Enemy.h"
-
-
+/*
+#include "Background.h"
+#include "Health.h"
+*/
+//Never uncomment these, demonic code that breaks the game for no good reason
 class ECS abstract
 {
 public:

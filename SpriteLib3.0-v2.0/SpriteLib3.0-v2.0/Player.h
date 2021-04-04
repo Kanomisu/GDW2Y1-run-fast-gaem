@@ -94,7 +94,7 @@ public:
 	}
 	
 	void SetScene(PhysicsPlayground* scene);
-
+	int GetHealth();
 	PhysicsPlayground* m_currScene;
 
 	//Are you currently attacking?????
@@ -149,7 +149,7 @@ private:
 	//HEALTH SHITZ
 	bool m_dying = false;
 	bool m_damaged = false;
-	int m_health = 2; // Three Hits and then https://www.youtube.com/watch?v=ovkC8Eb_7mE
+	int m_health = 3; // Three Hits and then https://www.youtube.com/watch?v=ovkC8Eb_7mE
 	float m_hitStunTimer = 0.00f;
 	float hitStunLength = 1.0f;
 	void kill();
