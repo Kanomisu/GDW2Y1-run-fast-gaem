@@ -36,15 +36,16 @@ void Game::InitGame()
 
 	//Creates a new scene.
 	//Replace this with your own scene.
-	PhysicsPlayground *p =  new PhysicsPlayground("Project Flow");
+	PhysicsPlayground* p = new PhysicsPlayground("Project Flow"); // 1
 	p->GetPhysicsWorld();
 	m_scenes.push_back(new FirstCreation("FIRST SCENE!!!!"));
 	m_scenes.push_back(p);
 	m_scenes.push_back(new AnimationSpritePlayground("Animation TIEM!!!!"));
-	m_scenes.push_back(new TitleScreen("Project Flow")); //main menu aka title screen
+	m_scenes.push_back(new TitleScreen("Project Flow")); //main menu aka title screen 3
+	m_scenes.push_back(new EndScreen("Project Flow")); //end screen 4 
 	m_scenes.push_back(new TestScene("Test Scene sexy baby"));
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[3]; 
+	m_activeScene = m_scenes[4]; 
 	//m_activeScene = m_scenes[3]; //TEST SCENE
 
 

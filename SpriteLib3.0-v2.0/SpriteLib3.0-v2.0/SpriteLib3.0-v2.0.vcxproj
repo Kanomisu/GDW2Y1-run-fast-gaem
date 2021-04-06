@@ -90,13 +90,13 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glew32.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;SOIL_ext.lib;opengl32.lib;Box2D.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib/Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glew32.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;SOIL_ext.lib;opengl32.lib;Box2D.lib;Tone Fire.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,7 +132,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glew32.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;SOIL_ext.lib;opengl32.lib;Box2D.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;glew32.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;SOIL_ext.lib;opengl32.lib;Box2D.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -149,6 +149,8 @@
     <ClInclude Include="DestroyTrigger.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="EndScreen.h" />
+    <ClInclude Include="EndTrigger.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FirstCreation.h" />
     <ClInclude Include="Framebuffer.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="include\ToneFire\ToneFire.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JSON.h" />
     <ClInclude Include="MainEntities.h" />
@@ -216,6 +219,8 @@
     <ClCompile Include="DestroyTrigger.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="EndScreen.cpp" />
+    <ClCompile Include="EndTrigger.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FirstCreation.cpp" />
     <ClCompile Include="Framebuffer.cpp" />

@@ -64,6 +64,8 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
+    <ClCompile Include="EndTrigger.cpp" />
+    <ClCompile Include="EndScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
@@ -131,5 +133,8 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Xinput.h" />
     <ClInclude Include="TitleScreen.h" />
+    <ClInclude Include="include\ToneFire\ToneFire.h" />
+    <ClInclude Include="EndTrigger.h" />
+    <ClInclude Include="EndScreen.h" />
   </ItemGroup>
 </Project>

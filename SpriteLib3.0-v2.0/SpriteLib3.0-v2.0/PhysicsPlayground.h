@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "PhysicsPlaygroundListener.h"
+#include "Tone Fire/ToneFire.h"
 #include <string>
 
 class PhysicsPlayground : public Scene 
@@ -181,9 +182,4 @@ protected:
 	std::vector <unsigned int> enemyEnts = {};
 
 	int background = 1;
-
-	unsigned int backgroundID;
-
-	int puzzleWall1;
-	int puzzleWall2;
 };
