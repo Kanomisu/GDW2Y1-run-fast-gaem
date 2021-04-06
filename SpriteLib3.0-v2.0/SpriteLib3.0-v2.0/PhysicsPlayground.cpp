@@ -527,7 +527,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	//SpawnEnemy(-3600, -80, -3680, -3720);
+	//Spawn Enemies
+	{
+		SpawnEnemy(-145, -250, -305, -145);
+		SpawnEnemy(1460, -138, 1460, 1580);
+		SpawnEnemy(2400, -405, 2400, 2570);
+	}
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
