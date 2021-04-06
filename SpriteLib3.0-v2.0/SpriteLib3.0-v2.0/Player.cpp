@@ -232,7 +232,7 @@ void Player::MovementUpdate()
 			//m_canJump->m_canJump = true; //TODO Add ability to jump out of air dash (extra jump)
 		}
 	}
-	std::cout << time;
+	
 }
 
 void Player::AnimationUpdate()

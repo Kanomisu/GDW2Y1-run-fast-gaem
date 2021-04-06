@@ -17,7 +17,7 @@
 
 #include "Background.h"
 #include "Health.h"
-
+#include "AnimObject.h"
 //Mouse Motion event
 typedef SDL_MouseMotionEvent MotionEvent;
 //Mouse Button event

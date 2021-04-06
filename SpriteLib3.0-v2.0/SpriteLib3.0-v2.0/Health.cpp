@@ -32,13 +32,13 @@ void Health::InitHealth(std::string& fileName, std::string& animationJSON, int w
 
 }
 
-void Health::update(unsigned int pID)
+void Health::update()
 {
 	auto& Cam = ECS::GetComponent<Camera>(MainEntities::MainCamera());
 	auto& trans = ECS::GetComponent<Transform>(hID);
 	trans.SetPosition(vec3(Cam.GetPosition().x - 180, Cam.GetPosition().y + 100, 20.f));
 
-	int health = ECS::GetComponent<Player>(pID).GetHealth();
+	int health = ECS::GetComponent<Player>(MainEntities::MainPlayer()).GetHealth();
 	animUpdate(health);
 }
 

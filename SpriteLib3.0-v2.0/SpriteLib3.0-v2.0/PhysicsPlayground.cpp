@@ -228,14 +228,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x - 200, Cam.GetPosition().y + 200, 10.f));
 
-		ECS::GetComponent<Health>(entity).InitHealth(fileName, animationJSON, 102.4, 51.2, entity);
+		ECS::GetComponent<Health>(entity).InitHealth(fileName, animationJSON, 64, 32, entity);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		healthHUD = entity;
 
 	}
 	
 	
-	//Testing Sizing
 	{
 		
 		//Creates entity
@@ -253,6 +252,29 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		
 
 	}
+	//Dog
+	{
+		//Creates entity 
+
+		auto entity = ECS::CreateEntity();
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimObject>(entity);
+
+		//Sets up the components
+		std::string fileName = "spritesheets/funny-dog.png";
+		std::string animationJSON = "DogAnims.json";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-3650, -100, 3.f));
+
+		ECS::GetComponent<AnimObject>(entity).InitObject(fileName, animationJSON, 25, 19, entity);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+
+	}
+
+
 
 	//Tutorial Assets\\
 
@@ -269,6 +291,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	CreateDecoration("Shift.png", 32, 32, -2972, 60, 2);
 
+	CreateDecoration("Mouse_no_click.png", 32, 32, -1830, 540, 2);
+	CreateDecoration("Mouse_clicked.png", 32, 32, -1800, 540, 2);
+	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
 	//BEGINNING\\
 
 	CreateBoxEntity("boxSprite.jpg", 128, 32, -2240.f, 234.f);
@@ -569,10 +594,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 void PhysicsPlayground::Update()
 {
 	//PrintMouseLocation(m_mousePos);
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 
 	ECS::GetComponent<Background>(background).update();
-	ECS::GetComponent<Health>(healthHUD).update(MainEntities::MainPlayer());
+	ECS::GetComponent<Health>(healthHUD).update();
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();
