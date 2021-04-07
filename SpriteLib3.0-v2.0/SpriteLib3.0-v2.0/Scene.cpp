@@ -96,7 +96,7 @@ void Scene::AdjustScrollOffset()
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetOffset(maxSizeY - playerHalfSize);
 }
 
-void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ)
+void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ, int rotDeg)
 {
 	auto entity = ECS::CreateEntity();
 
@@ -108,6 +108,9 @@ void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int
 	std::string fileName = name;
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, sprX, sprY);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(posX, posY, posZ));
+	//ECS::GetComponent<Transform>(entity).SetRotationAngleY(rotDeg);
+	//ECS::GetComponent<Transform>(entity).SetRotationAngleX(rotDeg);
+	ECS::GetComponent<Transform>(entity).SetRotationAngleZ(rotDeg);
 }
 
 void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 

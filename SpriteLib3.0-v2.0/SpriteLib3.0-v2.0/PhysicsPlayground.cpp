@@ -293,6 +293,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	CreateDecoration("Mouse_no_click.png", 32, 32, -1830, 540, 2);
 	CreateDecoration("Mouse_clicked.png", 32, 32, -1800, 540, 2);
+
+	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180); //
+
 	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
 	//BEGINNING\\
 

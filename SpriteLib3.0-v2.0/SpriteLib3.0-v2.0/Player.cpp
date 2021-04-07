@@ -315,6 +315,7 @@ void Player::AnimationUpdate()
 
 void Player::PlayerSpeedLevel()
 {
+	/*
 	//int level = 1;
 	if (Input::GetKeyDown(Key::U)) {
 		m_playerSpeed = 10.f;
@@ -332,9 +333,9 @@ void Player::PlayerSpeedLevel()
 		m_playerSpeed = 70.f;
 		std::cout << "Key Pressed" << std::endl;
 	}
-
+	*/ //Can't have this in the final version, don't want someone accidentally pressing these keys!!
 	//In Case this doesn't feel good, we can specify the player speed here.
-	//The fuck is this?
+	//
 	/*
 	m_playerSpeed = 10 * 2 ^ (level - 1);
 	switch (level) {
