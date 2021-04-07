@@ -228,54 +228,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(Cam.GetPosition().x - 200, Cam.GetPosition().y + 200, 10.f));
 
-		ECS::GetComponent<Health>(entity).InitHealth(fileName, animationJSON, 128, 64, entity);
+		ECS::GetComponent<Health>(entity).InitHealth(fileName, animationJSON, 64, 32, entity);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		healthHUD = entity;
 
 	}
 	
 	
-	//Testing Sizing
 	{
-		/*
 		
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-		//ECS::AttachComponent<PhysicsBody>(entity);
-
-		//Sets up components
-		std::string fileName = "map.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 7676, 2308);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -400.f, 2.f));
-
-		//auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-		//auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		//float shrinkX = 0.f;
-		//float shrinkY = 0.f;
-
-		/*
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(30.f), float32(-10.f));
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
-			float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, FRIENDLY); //Do not use the variable environment
-		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
-		*/
-		
-		
-
-
-		
-
 		//Creates entity
 		auto entity = ECS::CreateEntity();
 
@@ -291,9 +252,48 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		
 
 	}
+	//Dog
+	{
+		//Creates entity 
 
-	
+		auto entity = ECS::CreateEntity();
+		//Add components 
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<AnimObject>(entity);
 
+		//Sets up the components
+		std::string fileName = "spritesheets/funny-dog.png";
+		std::string animationJSON = "DogAnims.json";
+
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-3650, -100, 3.f));
+
+		ECS::GetComponent<AnimObject>(entity).InitObject(fileName, animationJSON, 25, 19, entity);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+
+	}
+
+
+
+	//Tutorial Assets\\
+
+	CreateDecoration("A_key.png", 16, 16, -3720, -20, 2);
+
+	CreateDecoration("S_key.png", 16, 16, -3699, -20, 2);
+
+	CreateDecoration("D_key.png", 16, 16, -3678, -20, 2);
+
+	CreateDecoration("W_key.png", 16, 16, -3699, 1, 2);
+
+
+	CreateDecoration("Space.png", 32, 32, -3592, -20, 2);
+
+	CreateDecoration("Shift.png", 32, 32, -2972, 60, 2);
+
+	CreateDecoration("Mouse_no_click.png", 32, 32, -1830, 540, 2);
+	CreateDecoration("Mouse_clicked.png", 32, 32, -1800, 540, 2);
+	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
 	//BEGINNING\\
 
 	CreateBoxEntity("boxSprite.jpg", 128, 32, -2240.f, 234.f);
@@ -599,10 +599,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 void PhysicsPlayground::Update()
 {
 	//PrintMouseLocation(m_mousePos);
+	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
+
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 
 	ECS::GetComponent<Background>(background).update();
-	ECS::GetComponent<Health>(healthHUD).update(MainEntities::MainPlayer());
+	ECS::GetComponent<Health>(healthHUD).update();
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();

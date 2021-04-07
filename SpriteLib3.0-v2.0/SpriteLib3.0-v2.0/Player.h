@@ -154,6 +154,8 @@ private:
 	float hitStunLength = 1.0f;
 	void kill();
 
+	float maxJumpTime = 0.01;
+	float time = 0.0;
 };
 
 #endif // !__PLAYER_H__

@@ -19,6 +19,6 @@ public:
 	Health();
 	Health(std::string& fileName, std::string& animationJSON, int width, int height, unsigned int);
 	void InitHealth(std::string& fileName, std::string& animationJSON, int width, int height, unsigned int ID);
-	void update(unsigned int pID);
+	void update();
 	void animUpdate(int hp);
 };

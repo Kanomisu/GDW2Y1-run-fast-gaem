@@ -131,7 +131,7 @@ void Player::MovementUpdate()
 	float slideImpulse = 300.f;
 	float airSpeedMultiplier = 1.f; //TODO Make it so you can adjust your air speed only slightly
 	float friction = 0.8f;
-
+	bool hasJumped = false;
 	//check if hooks attached first, then if its attached, change how movement works
 	//ECS::GetComponent<Trigger*>(m_currScene->getActiveHook());
 
@@ -152,7 +152,7 @@ void Player::MovementUpdate()
 	}
 	if (!m_locked) //Checks if the player should be able to control their character
 	{
-		if (Input::GetKeyDown(Key::LeftControl) && m_canJump->m_canDash)
+		if (Input::GetKeyDown(Key::Shift) && m_canJump->m_canDash)
 		{
 			m_locked = true;
 			m_canJump->m_canDash = false;
@@ -175,13 +175,38 @@ void Player::MovementUpdate()
 				m_moving = true;
 			}
 
+			if (Input::GetKeyDown(Key::Space) && m_canJump->m_canJump)
+			{
+				time = maxJumpTime;
+				std::cout << "maxJumpTime";
+				m_canJump->m_canJump = false;
+			}
+			if (time > 0)
+			{
+				time -= Timer::deltaTime;
+				if (!(Input::GetKey(Key::Space)) || time <= 0)
+				{
+					time = 0;
+				}
+				if (Input::GetKey(Key::Space))
+				{
+					m_jumping = true;
+					m_locked = true;
+					m_physBody->ApplyForce(vec3(0, 89000000, 0));
+				}
+			}
+			/*
+
 			if (Input::GetKey(Key::Space) && m_canJump->m_canJump)
 			{
 				m_jumping = true;
 				m_locked = true;
-				jumpVel = m_jumpHeight;
-				m_canJump->m_canJump = false;
+				//jumpVel = m_jumpHeight * 3;
+				m_physBody->ApplyForce(vec3(0, 89000000,0));
+				//m_canJump->m_canJump = false;
+				//hasJumped = true;
 			}
+			*/
 		}
 		if (m_physBody->GetVelocity().y != 0 && vel == 0.f)
 		{
@@ -207,6 +232,7 @@ void Player::MovementUpdate()
 			//m_canJump->m_canJump = true; //TODO Add ability to jump out of air dash (extra jump)
 		}
 	}
+	
 }
 
 void Player::AnimationUpdate()
