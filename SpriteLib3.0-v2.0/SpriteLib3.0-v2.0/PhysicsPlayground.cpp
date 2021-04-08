@@ -250,11 +250,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int m = 2;
 		vec4 temp = vec4(-80.f*m,80.f*m, -80.f*m, 80.f*m); 
 		vec4 temp2 = temp * 4;
-		//ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
-		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp2);
+		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
+		//ECS::GetComponent<Camera>(entity).SetOrthoSize(temp2);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
-		//ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp2.x, temp2.y, temp2.z, temp2.w, -400.f, 400.f);
+		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+		//ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp2.x, temp2.y, temp2.z, temp2.w, -400.f, 400.f);
 
 		//Attaches the camera to vert and horiz scrolls
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
