@@ -17,7 +17,7 @@ public:
 	PhysicsPlayground* currentScene;
 	b2Vec2 respawn;
 protected:
-
+	bool activated = false;
 	bool triggered = false;
 };
 
