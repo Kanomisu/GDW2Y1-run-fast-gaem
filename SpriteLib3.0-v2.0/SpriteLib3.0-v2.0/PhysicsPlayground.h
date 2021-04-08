@@ -151,7 +151,6 @@ public:
 		}
 	}
 
-
 	void PrintMouseLocation(vec2 mousePos);
 	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
@@ -171,9 +170,15 @@ protected:
 	bool m_attackBegin = false;
 	float m_attackTimer = 0;
 	int activeATK = NULL;
+	unsigned endTrigger;
+	bool endGame = false;
 
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
+
+	ToneFire::FMODCore fmod{};
+	ToneFire::CoreSound Sound{ "Michael Wyckoff - Analog Sunrise (Boneworks OST).mp3" , FMOD_2D || FMOD_LOOP_NORMAL };
+
 
 	std::string m_fileInput;
 

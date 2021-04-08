@@ -20,6 +20,7 @@ protected:
 	vec2 m_mousePos = vec2(0.f, 0.f);
 
 	ToneFire::FMODCore fmod{};
+	ToneFire::CoreSound Sound{ "Daniel Birch - I'll Drive.mp3" , FMOD_2D || FMOD_LOOP_NORMAL };
 
 	bool click = false;
 };

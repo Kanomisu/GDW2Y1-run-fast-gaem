@@ -155,7 +155,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
-
+	//m_physicsWorld = new b2World(m_gravity);
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
@@ -505,7 +505,43 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-	SpawnEnemy(-3600, -80, -3680, -3720);
+	//SpawnEnemy(-3600, -80, -3680, -3720);
+
+	/*end flag
+	{
+		///Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+		ECS::AttachComponent<Trigger*>(entity);
+
+		//Sets up components
+		std::string fileName = "boxSprite.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10.f, 100.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(-3580.f, -80.f, 3.f));
+		ECS::GetComponent<Trigger*>(entity) = new EndTrigger();
+		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+		EndTrigger* temp = (EndTrigger*)ECS::GetComponent<Trigger*>(entity);
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(-3580.f), float32(-80.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+		tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	}
+	*/
 	//Player entity
 	{
 		auto entity = ECS::CreateEntity();
@@ -558,6 +594,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		playerRef = entity;
 	}
 	
+	endTrigger = CreateEndTrigger(false, "boxSprite.jpg", 10.f, 100.f, -3580.f, -80.f, 3.f, -3580.f, -80.f);
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -566,6 +603,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	ECS::GetComponent<Background>(background).attachSprite(&ECS::GetComponent<Sprite>(background));
 	*/
 
+	Sound.Play();
+	Sound.SetVolume(0.1);
 }
  
 
@@ -573,8 +612,9 @@ void PhysicsPlayground::Update()
 {
 	//PrintMouseLocation(m_mousePos);
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
-
 	ECS::GetComponent<Background>(background).update();
+
+	fmod.Update();
 
 	if (activeHook != NULL)
 	{
@@ -597,6 +637,16 @@ void PhysicsPlayground::Update()
 	for (int x = 0; x < this->enemyEnts.size(); x++) {
 		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
 		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
+	}
+
+	int change = ((EndTrigger*)(ECS::GetComponent<Trigger*>(endTrigger)))->returnInt();
+	((EndTrigger*)(ECS::GetComponent<Trigger*>(endTrigger)))->OnUpdate();
+	
+	std::cout << change;
+	if (change != -1)
+	{
+		sceneNum = 4;
+		Sound.Mute();
 	}
 }
 

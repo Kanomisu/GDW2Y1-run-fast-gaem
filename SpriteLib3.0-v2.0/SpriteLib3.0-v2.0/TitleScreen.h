@@ -15,17 +15,18 @@ public:
 	//Mouse Input
 	void MouseClick(SDL_MouseButtonEvent evnt)override;
 	void MouseMotion(SDL_MouseMotionEvent event);
-
+	
 protected:
 	vec2 m_mousePos = vec2(0.f, 0.f);
-
-	ToneFire::FMODCore fmod{};
 
 	bool menu = true;
 	bool play = false;
 	bool displayCredits = false;
 	bool inputCredits = false;
 	bool setScene = false;
+
+	ToneFire::FMODCore fmod{};
+	ToneFire::CoreSound Sound{ "Daniel Birch - Weightlessness.mp3" , FMOD_2D || FMOD_LOOP_NORMAL };
 
 	float timer = 0;
 	int loading = 1;

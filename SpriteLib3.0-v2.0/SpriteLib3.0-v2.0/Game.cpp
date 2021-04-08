@@ -45,7 +45,7 @@ void Game::InitGame()
 	m_scenes.push_back(new EndScreen("Project Flow")); //end screen 4 
 	m_scenes.push_back(new TestScene("Test Scene sexy baby"));
 	//Sets active scene reference to our scene
-	m_activeScene = m_scenes[4]; 
+	m_activeScene = m_scenes[3]; 
 	//m_activeScene = m_scenes[3]; //TEST SCENE
 
 

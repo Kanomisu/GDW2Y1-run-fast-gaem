@@ -8,7 +8,6 @@
 #include "MainEntities.h"
 #include <SDL2/SDL.h>
 
-
 class Scene
 {
 	
@@ -32,6 +31,7 @@ public:
 	void CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 
 								float zNear, float zFar, float aspectRatio, bool vertScroll=false, bool horizScroll=false);
 	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg = 0, int vecZ = 1.f, bool isDynamic = false, float shrinkXValue = 0, float shrinkYValue = 0);
+	unsigned CreateEndTrigger(bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY);
 	//void CreateSpriteEntity(int type, int body, bool triggerable, int* name, std::string file, int height, int width, int posx, int posy, int posz,
 		//int posX, int posY, float movingX, float movingY, int rotDeg, EntityCategories category, int hitting, float friction, float density);
 
@@ -83,6 +83,7 @@ public:
 
 	//Set window size (makes sure the camera aspect is proper)
 	void SetWindowSize(float windowWidth, float windowHeight);
+
 protected:
 	b2World* m_physicsWorld = nullptr;
 	b2Vec2 m_gravity = b2Vec2(float32(0.f), float32(0.f));

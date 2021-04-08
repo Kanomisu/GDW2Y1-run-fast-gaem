@@ -12,7 +12,7 @@ void EndScreen::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
-
+	//m_physicsWorld = new b2World(m_gravity);
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
@@ -38,18 +38,13 @@ void EndScreen::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("end.png", 576, 325, 0, 0, 0, 2);
 
 	//Tone Fire !!!!!!!!!!!!!!!!
-	ToneFire::CoreSound Sound("NepBoss.mp3", FMOD_2D | FMOD_LOOP_NORMAL);
 	Sound.Play();
-	Sound.SetVolume(0.09);
+	Sound.SetVolume(0.1);
 }
 
 void EndScreen::Update()
 {
 	fmod.Update();
-	if (click)
-	{
-		sceneNum = 3; //back to menu
-	}
 }
 
 void EndScreen::MouseClick(SDL_MouseButtonEvent evnt)
@@ -59,7 +54,8 @@ void EndScreen::MouseClick(SDL_MouseButtonEvent evnt)
 
 	if (ImGui::GetIO().MouseDown[1] || ImGui::GetIO().MouseDown[2])
 	{
-		click = true;
+		exit(0);
+		//everything breaks
 	}
 }
 

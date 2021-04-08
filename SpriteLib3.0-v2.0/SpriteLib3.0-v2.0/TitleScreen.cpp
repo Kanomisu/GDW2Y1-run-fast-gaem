@@ -15,7 +15,7 @@ void TitleScreen::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
-
+	//m_physicsWorld = new b2World(m_gravity);
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
@@ -103,10 +103,8 @@ void TitleScreen::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	}
 
-	//Tone Fire !!!!!!!!!!!!!!!!
-	ToneFire::CoreSound Sound("NepBoss.mp3", FMOD_2D | FMOD_LOOP_NORMAL);
 	Sound.Play();
-	Sound.SetVolume(0.09);
+	Sound.SetVolume(0.2);
 
 }
 
@@ -115,7 +113,10 @@ void TitleScreen::Update()
 	auto& loading = ECS::GetComponent<PhysicsBody>(MainEntities::MainLoading());
 	auto& credits = ECS::GetComponent<PhysicsBody>(MainEntities::MainCredits());
 	ImGui::GetIO().MouseDown[2] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT));
+
 	fmod.Update();
+	
+
 	if (play)
 	{
 		if (timer > 0)
@@ -128,10 +129,11 @@ void TitleScreen::Update()
 			setScene = true;
 		}
 	}
-	
+		
 	if (setScene)
 	{
 		sceneNum = 1;
+		Sound.Mute();
 	}
 
 	if (displayCredits)
@@ -161,13 +163,13 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 	float dx = m_mousePos.x;
 	float dy = m_mousePos.y;
 	ImGui::GetIO().MouseDown[1] = (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT));
-	ToneFire::CoreSound Select("boing2.wav");
+	//ToneFire::CoreSound Select("boing2.wav");
 
 	if (menu)
 	{
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -165.f && dx <= -105.f) && (dy >= -10 && dy <= 10))
 		{
-			Select.Play();
+			//Select.Play();
 			std::cout << "Starting game!" << std::endl;
 			timer = 1.f;
 			menu = false;
@@ -175,7 +177,7 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 		}
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -170.f && dx <= -100.f) && (dy >= -60 && dy <= -40))
 		{
-			Select.Play();
+			//Select.Play();
 			std::cout << "Credits!" << std::endl;
 			menu = false;
 			displayCredits = true;
@@ -183,7 +185,7 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 		}
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -155.f && dx <= -95.f) && (dy >= -110 && dy <= -90))
 		{
-			Select.Play();
+			//Select.Play();
 			std::cout << "Thank you for playing!" << std::endl;
 			exit(0);
 		}
