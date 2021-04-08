@@ -29,6 +29,8 @@ public:
 	void KeyboardUp() override;
 
 	int ShootHook();
+	int ShootRope();
+	void UpdateRope();
 	
 	void SpawnEnemy(float spawnX, float spawnY, float roamA, float roamB) {
 		std::cout << "Enemy Spawned" << std::endl;
@@ -104,11 +106,20 @@ public:
 	{
 		if (m_hookDeleteQueued)
 		{
+			if (activeRope != NULL)
+			{
+				
+
+				ECS::DestroyEntity(activeRope);
+
+				activeRope = NULL;
+			}
 			if (activeHook != NULL)
 			{
 				PhysicsBody::m_bodiesToDelete.push_back(activeHook);
 				activeHook = NULL;
 			}
+			
 			m_hookDeleteQueued = false;
 		}
 	}
@@ -155,6 +166,10 @@ public:
 	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
 	void MousePress(SDL_MouseMotionEvent event);
+	void respawnPlayer();
+	void setRespawn(b2Vec2);
+	int makeCheckpoint(b2Vec2);
+	int makeDeathPlane(b2Vec2);
 
 protected:
 	bool m_hookDeleteQueued = false;
@@ -163,6 +178,7 @@ protected:
 
 	int playerRef;
 	int activeHook = NULL;
+	int activeRope = NULL;
 
 	vec2 m_mousePos = vec2(0.f, 0.f);
 

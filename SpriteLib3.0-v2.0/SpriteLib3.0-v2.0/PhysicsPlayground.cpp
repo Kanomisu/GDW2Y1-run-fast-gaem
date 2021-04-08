@@ -1,11 +1,17 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "Hook.h"
-#include <cmath>
+#include "checkpointTrigger.h"
+#include "DeathTrigger.h"
+#include <cmath> //pow and sqrt
+#include <math.h> //trig
 #include <random>
 
 int playerX = 0;
 int playerY = 0;
+
+
+b2Vec2 respawnLocation = b2Vec2(-3700.f, -80.f);
 
 b2Vec2 activeProjDir;
 b2Vec2 attackPath;
@@ -99,7 +105,71 @@ int PhysicsPlayground::ShootHook()
 
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
 
+	ShootRope(); //broken up for simplicity
+
 	return entity;
+}
+
+int PhysicsPlayground::ShootRope()
+{
+
+	//kill pre existing rope
+	if (activeRope != NULL)
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(activeRope);
+	}
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Sets up components
+	std::string fileName = "Rope.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 1, 2); //1*2 sprite that gets stretched
+	ECS::GetComponent<Transform>(entity).SetPosition(ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition()); //Spawned at position of player
+	
+	activeRope = entity;
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody(); //mega super duper important when spawning anything at runtime
+
+	return entity;
+}
+
+void PhysicsPlayground::UpdateRope()
+{
+	//gather necessary data for later math
+	vec3 playerPos = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition();
+	vec3 hookPos = ECS::GetComponent<Transform>(activeHook).GetPosition();
+
+	//math time to update the rope ------------------------------------------------------------------------
+
+	//get both hook and players x and y values, find the differences in each, thats the adjecent and opposite of our triangle
+	float xDiff = (hookPos.x - playerPos.x); //"adjecent side"
+	float yDiff = (hookPos.y - playerPos.y); //"opposite side"
+	//turn these into a vector
+	b2Vec2 temp = b2Vec2(xDiff, yDiff);
+	//find the angle between a b2vec2 made from the two differences and vec2(1,0), rotate the rope by that angle
+	//cos(angleBetween) = u dot v / magnitude of u * magnitude of v
+	
+	float angleBetween = acos(((temp.x * 1 + temp.y * 0) / (temp.Length() * 1)));
+
+	if (yDiff < 0) //if the angle is in q3 or q4, we need to rotate cw instead of ccw because of how SetRotationAngleZ automatically rotates ccw from (1,0) 
+	{
+		angleBetween *= -1;
+	}
+	
+
+	ECS::GetComponent<Transform>(activeRope).SetRotationAngleZ(angleBetween);
+
+	//lastly scale the ropes x value based on the length of the magnitude of the vec3 we made from the differneces.
+	ECS::GetComponent<Sprite>(activeRope).SetWidth(temp.Length());
+
+	//set rope location to the center of the hypotenuse
+	ECS::GetComponent<Transform>(activeRope).SetPosition(playerPos.x + (xDiff * 0.5), playerPos.y + (yDiff * 0.5), playerPos.z);
+
+
 }
 
 int PhysicsPlayground::Attack()
@@ -439,6 +509,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempPhsBody.SetFixedRotation(true);
 
 	}
+	//SpawnEnemy(-3600, -80, -3680, -3720);
+	makeCheckpoint(b2Vec2(-3600, -80));
+	makeCheckpoint(b2Vec2(-3400, -80));
+	makeDeathPlane(b2Vec2(-3900, -150));
 
 	//Map entity PT 2 - Bottom
 	{
@@ -612,6 +686,10 @@ void PhysicsPlayground::Update()
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();
 	}
+	if (activeRope != NULL)
+	{
+		UpdateRope();
+	}
 
 	//If the hook is in its "in flight" state, update its movement
 	
@@ -630,6 +708,103 @@ void PhysicsPlayground::Update()
 		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
 		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
 	}
+}
+
+void PhysicsPlayground::respawnPlayer()
+{
+	ECS::GetComponent<PhysicsBody>(playerRef).SetPosition(respawnLocation, true);
+}
+
+void PhysicsPlayground::setRespawn(b2Vec2 loc)
+{
+	respawnLocation = loc;
+}
+
+int PhysicsPlayground::makeDeathPlane(b2Vec2 location)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = "boxSprite.jpg";
+	float fileX = 300;
+	float fileY = 25;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 2.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new DeathTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((DeathTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+
+
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(location.x), float32(location.y));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, fileX, fileY, vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
+}
+
+int PhysicsPlayground::makeCheckpoint(b2Vec2 location)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = "boxSprite.jpg";
+	float fileX = 25;
+	float fileY = 25;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 4.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new checkpointTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((checkpointTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+	((checkpointTrigger*)ECS::GetComponent<Trigger*>(entity))->setRespawn(b2Vec2(location.x, location.y + 20)); //respawn location is set to where the checkpoint is
+
+
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(location.x), float32(location.y));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, fileX, fileY, vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
 }
 
 int PhysicsPlayground::getActiveHook()
@@ -709,6 +884,10 @@ void PhysicsPlayground::KeyboardDown()
 	if (Input::GetKeyDown(Key::T))
 	{
 		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
+	}
+	if (Input::GetKeyDown(Key::R))
+	{
+		respawnPlayer();
 	}
 	/* I am trying to figure this out so it's relevant with player.cpp
 	if (Input::GetKeyDown(Key::LeftControl))

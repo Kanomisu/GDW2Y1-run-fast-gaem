@@ -66,6 +66,8 @@
     <ClCompile Include="TitleScreen.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="AnimObject.cpp" />
+    <ClCompile Include="checkpointTrigger.cpp" />
+    <ClCompile Include="DeathTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
@@ -135,5 +137,7 @@
     <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="AnimObject.h" />
+    <ClInclude Include="checkpointTrigger.h" />
+    <ClInclude Include="DeathTrigger.h" />
   </ItemGroup>
 </Project>
