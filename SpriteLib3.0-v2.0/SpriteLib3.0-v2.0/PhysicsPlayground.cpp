@@ -248,10 +248,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 		int m = 2;
-		vec4 temp = vec4(-80.f*m,80.f*m, -80.f*m, 80.f*m);
-		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
+		vec4 temp = vec4(-80.f*m,80.f*m, -80.f*m, 80.f*m); 
+		vec4 temp2 = temp * 4;
+		//ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
+		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp2);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
-		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+		//ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp2.x, temp2.y, temp2.z, temp2.w, -400.f, 400.f);
 
 		//Attaches the camera to vert and horiz scrolls
 		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
@@ -512,7 +515,17 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//SpawnEnemy(-3600, -80, -3680, -3720);
 	makeCheckpoint(b2Vec2(-3600, -80));
 	makeCheckpoint(b2Vec2(-3400, -80));
-	makeDeathPlane(b2Vec2(-3900, -150));
+
+	makeDeathPlane(b2Vec2(-3900, -150), 50, 50);//test
+	makeDeathPlane(b2Vec2(770, -600), 260, 50);
+	makeDeathPlane(b2Vec2(1400, -600), 400, 50);
+	makeDeathPlane(b2Vec2(1900, -600), 360, 50);
+	makeDeathPlane(b2Vec2(2879, -700), 580, 50);
+	makeDeathPlane(b2Vec2(3712, -750), 192, 50);
+	makeDeathPlane(b2Vec2(3970, -750), 150, 50);
+	makeDeathPlane(b2Vec2(4705, -750), 1030, 50);
+	makeDeathPlane(b2Vec2(5664, -750), 65, 50);
+	makeDeathPlane(b2Vec2(6516, -750), 165, 50);
 
 	//Map entity PT 2 - Bottom
 	{
@@ -720,7 +733,7 @@ void PhysicsPlayground::setRespawn(b2Vec2 loc)
 	respawnLocation = loc;
 }
 
-int PhysicsPlayground::makeDeathPlane(b2Vec2 location)
+int PhysicsPlayground::makeDeathPlane(b2Vec2 location, float length, float width)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -734,8 +747,8 @@ int PhysicsPlayground::makeDeathPlane(b2Vec2 location)
 
 	//Sets up components
 	std::string fileName = "boxSprite.jpg";
-	float fileX = 300;
-	float fileY = 25;
+	float fileX = length;
+	float fileY = width;
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 2.f));
 
@@ -744,7 +757,7 @@ int PhysicsPlayground::makeDeathPlane(b2Vec2 location)
 	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
 	((DeathTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
 
-
+	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
 
 	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
@@ -895,6 +908,10 @@ void PhysicsPlayground::KeyboardDown()
 		queueAtk();
 	}
 	*/
+	if (Input::GetKeyDown(Key::K))
+	{
+		std::cout << GetMouseLocation().x << "      " << GetMouseLocation().y << std::endl;
+	}
 }
 
 void PhysicsPlayground::KeyboardUp()

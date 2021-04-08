@@ -169,7 +169,7 @@ public:
 	void respawnPlayer();
 	void setRespawn(b2Vec2);
 	int makeCheckpoint(b2Vec2);
-	int makeDeathPlane(b2Vec2);
+	int makeDeathPlane(b2Vec2, float, float);
 
 protected:
 	bool m_hookDeleteQueued = false;
