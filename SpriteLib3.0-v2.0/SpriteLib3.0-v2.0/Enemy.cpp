@@ -173,6 +173,7 @@ void Enemy::attack()
 
 void Enemy::thinking()
 {
+	m_physBody->SetVelocity(vec3(0, 0, 0));
 	if (m_timer > 0) {
 		m_timer -= Timer::deltaTime;
 	}

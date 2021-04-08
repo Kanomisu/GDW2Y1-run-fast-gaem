@@ -362,7 +362,7 @@ void Player::damage()
 		//Anim to damaged anim 
 		m_health -= 1;
 	}
-	else {
+	else if (m_health == 0) {
 		m_dying = true;
 		m_locked = true;
 		kill();
