@@ -96,7 +96,7 @@ void Scene::AdjustScrollOffset()
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetOffset(maxSizeY - playerHalfSize);
 }
 
-void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ, int rotDeg)
+void Scene::CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ, double rotDeg)
 {
 	auto entity = ECS::CreateEntity();
 

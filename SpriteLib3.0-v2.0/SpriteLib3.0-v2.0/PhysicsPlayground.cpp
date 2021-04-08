@@ -51,8 +51,8 @@ int PhysicsPlayground::ShootHook()
 
 
 	//Sets up the components
-	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 20);
+	std::string fileName = "hook.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 20, 16);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(playerX, playerY, 10));
 
@@ -90,11 +90,26 @@ int PhysicsPlayground::ShootHook()
 	float projSpeedMult = 200;
 	
 	activeProjDir = b2Vec2(Vec1x/Vec1Magnitude * projSpeedMult, Vec1y/Vec1Magnitude * projSpeedMult);
+
 	//------------------------------
+	{
+		//calculate rotation angle for hook sprite
+
+		float angleBetween = acos(((activeProjDir.x * 1 + activeProjDir.y * 0) / (activeProjDir.Length() * 1)));
+
+		if (activeProjDir.y < 0) //if the angle is in q3 or q4, we need to rotate cw instead of ccw because of how SetRotationAngleZ automatically rotates ccw from (1,0) 
+		{
+			angleBetween *= -1;
+		}
+		tempPhsBody.SetRotationAngleDeg(angleBetween * 57.295779513);
+	}
+	
+
+		
+	
 
 
-
-	tempPhsBody.SetRotationAngleDeg(0);//rotation of the actual sprite
+	
 	tempPhsBody.SetGravityScale(0.f);
 
 	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(activeProjDir);
@@ -319,6 +334,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180); //
 
 	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
+
+
+
+	//after fall
+
+	CreateDecoration("Shift.png", 32, 32, -652, -180, 2);
+	CreateDecoration("Arrow.png", 24, 24, -620, -180, 2, 3.14159265358979323846);
+	CreateDecoration("EnemyBoom.png", 64, 64, -556, -180, 2);
+
 	
 	//BEGINNING\\
 
@@ -483,6 +507,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	makeDeathPlane(b2Vec2(4705, -750), 1030, 50);
 	makeDeathPlane(b2Vec2(5664, -750), 65, 50);
 	makeDeathPlane(b2Vec2(6516, -750), 165, 50);
+
+
+
 
 	//Map entity PT 2 - Bottom
 	{

@@ -27,7 +27,7 @@ public:
 	virtual void GUI();
 
 	void AdjustScrollOffset();
-	void CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ, int rotDeg =0);
+	void CreateDecoration(std::string name, int sprX, int sprY, int posX, int posY, int posZ, double rotDeg =0);
 	void CreateCameraEntity(bool mainCamera, float windowWidth, float windowHeight, float left, float right, float bottom, float top, 
 								float zNear, float zFar, float aspectRatio, bool vertScroll=false, bool horizScroll=false);
 	void CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, bool invis, int rotDeg = 0, int vecZ = 1.f, bool isDynamic = false, float shrinkXValue = 0, float shrinkYValue = 0);
