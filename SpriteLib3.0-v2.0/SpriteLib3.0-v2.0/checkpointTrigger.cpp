@@ -18,7 +18,7 @@ void checkpointTrigger::OnEnter()
 	{
 
 		currentScene->setRespawn(respawn);
-		
+		activated = true; //activated and triggered are similar, but activated doesnt get set to false on exit.
 		triggered = true;
 	}
 
