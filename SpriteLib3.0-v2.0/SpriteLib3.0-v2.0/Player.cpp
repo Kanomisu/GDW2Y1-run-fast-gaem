@@ -362,10 +362,9 @@ void Player::damage()
 		//Anim to damaged anim 
 		m_health -= 1;
 	}
-	else if (m_health == 0) {
-		m_dying = true;
-		m_locked = true;
-		kill();
+	if (m_health == 0) {
+		m_currScene->respawnPlayer();
+		m_health = 3;
 	}
 	//std::cout << "Health after: " << m_health << std::endl;
 }

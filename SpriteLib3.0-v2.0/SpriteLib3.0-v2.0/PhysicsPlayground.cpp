@@ -87,7 +87,7 @@ int PhysicsPlayground::ShootHook()
 	float Vec1y = -1 * (playerPos.y - mouseGL.y);
 
 	float Vec1Magnitude = sqrt(pow(Vec1x, 2.0) + pow(Vec1y, 2.0));
-	float projSpeedMult = 100;
+	float projSpeedMult = 200;
 	
 	activeProjDir = b2Vec2(Vec1x/Vec1Magnitude * projSpeedMult, Vec1y/Vec1Magnitude * projSpeedMult);
 	//------------------------------
@@ -463,8 +463,15 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	}
 	//SpawnEnemy(-3600, -80, -3680, -3720);
-	makeCheckpoint(b2Vec2(-3600, -80));
-	makeCheckpoint(b2Vec2(-3400, -80));
+	
+	makeCheckpoint(b2Vec2(-1135, 505));
+	makeCheckpoint(b2Vec2(-628, -297));
+	makeCheckpoint(b2Vec2(501, -200));
+	makeCheckpoint(b2Vec2(3400, -355));
+	makeCheckpoint(b2Vec2(5570, -290));
+
+		
+	
 
 	makeDeathPlane(b2Vec2(-3900, -150), 50, 50);//test
 	makeDeathPlane(b2Vec2(770, -600), 260, 50);
