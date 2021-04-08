@@ -69,6 +69,7 @@
     <ClCompile Include="DeathTrigger.cpp" />
     <ClCompile Include="EndTrigger.cpp" />
     <ClCompile Include="EndScreen.cpp" />
+    <ClCompile Include="CheckpointAnimObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
@@ -142,5 +143,6 @@
     <ClInclude Include="include\ToneFire\ToneFire.h" />
     <ClInclude Include="EndTrigger.h" />
     <ClInclude Include="EndScreen.h" />
+    <ClInclude Include="CheckpointAnimObject.h" />
   </ItemGroup>
 </Project>

@@ -748,10 +748,11 @@ int PhysicsPlayground::makeCheckpoint(b2Vec2 location)
 
 
 	//Sets up components
-	std::string fileName = "boxSprite.jpg";
+	std::string fileName = "spritesheets/CharSpritesheet.png";
+	std::string animations = "charAnimations.json";
 	float fileX = 25;
 	float fileY = 25;
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
+	//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 4.f));
 
 

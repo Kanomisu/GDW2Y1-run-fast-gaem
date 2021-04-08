@@ -146,6 +146,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraSystem.h" />
     <ClInclude Include="CanJump.h" />
+    <ClInclude Include="CheckpointAnimObject.h" />
     <ClInclude Include="checkpointTrigger.h" />
     <ClInclude Include="DeathTrigger.h" />
     <ClInclude Include="DestroyTrigger.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraSystem.cpp" />
     <ClCompile Include="CanJump.cpp" />
+    <ClCompile Include="CheckpointAnimObject.cpp" />
     <ClCompile Include="checkpointTrigger.cpp" />
     <ClCompile Include="DeathTrigger.cpp" />
     <ClCompile Include="DestroyTrigger.cpp" />

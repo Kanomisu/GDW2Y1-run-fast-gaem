@@ -1,5 +1,5 @@
 {
-  "CheckpointActive": {
+  "Active": {
     "Frame0": [ 0.0, 128.0, 64.0, 0.0 ],
     "Frame1": [ 64.0, 128.0, 128.0, 0.0 ],
     "Frame2": [ 128.0, 128.0, 192.0, 0.0 ],
@@ -53,7 +53,7 @@
     "SecsPerFrame": 0.30000001192092896
   },
 
-  "CheckpointInactive": {
+  "Inactive": {
     "Frame0": [ 1536.0, 16.0, 1664.0, 0.0 ], //1536 + 128 width, height is 16 and 0 all the time
     "Frame1": [  1664.0, 16.0,  1792.0, 0.0 ],
     "Frame2": [  1792.0, 16.0,  1920.0, 0.0 ],
