@@ -464,11 +464,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 	//SpawnEnemy(-3600, -80, -3680, -3720);
 	
-	makeCheckpoint(b2Vec2(-1135, 505));
-	makeCheckpoint(b2Vec2(-628, -297));
-	makeCheckpoint(b2Vec2(501, -200));
-	makeCheckpoint(b2Vec2(3400, -355));
-	makeCheckpoint(b2Vec2(5570, -290));
+	makeCheckpoint(b2Vec2(-1135, 525));
+	makeCheckpoint(b2Vec2(-620, -280));
+	makeCheckpoint(b2Vec2(501, -190));
+	makeCheckpoint(b2Vec2(3400, -345));
+	makeCheckpoint(b2Vec2(5570, -280));
 
 		
 	
