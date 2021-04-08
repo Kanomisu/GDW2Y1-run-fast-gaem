@@ -144,7 +144,7 @@ void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowH
 		}
 	}
 }
-void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg, int vecZ, bool isDynamic, float shrinkXValue, float shrinkYValue)
+void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, bool invis, int rotDeg, int vecZ, bool isDynamic, float shrinkXValue, float shrinkYValue)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -156,6 +156,10 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 
 	//Sets up components
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, spriteX, spriteY);
+	if (invis)
+	{
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	}
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(vecX, vecY, vecZ));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);

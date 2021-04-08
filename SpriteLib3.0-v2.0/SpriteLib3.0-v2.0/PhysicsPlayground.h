@@ -114,43 +114,6 @@ public:
 		}
 	}
 
-	int Attack();
-	void queueAtk()
-	{
-		m_attackBegin = true;
-		m_attackTimer = 1.0f;
-	}
-
-	void startAtk()
-	{
-		if (m_attackBegin)
-		{
-			if (m_attackTimer > 0)
-			{
-				Attack();
-				m_attackTimer -= Timer::deltaTime;
-			}
-			else
-			{
-				m_attackBegin = false;
-				m_attackDelete = true;
-			}
-		}
-	}
-
-	void deleteAtk()
-	{
-		if (m_attackDelete)
-		{
-			if (activeATK != NULL)
-			{
-				PhysicsBody::m_bodiesToDelete.push_back(activeATK);
-				activeATK = NULL;
-			}
-			m_attackDelete = false;
-		}
-	}
-
 	void PrintMouseLocation(vec2 mousePos);
 	vec2 GetMouseLocation();
 	void MouseMotion(SDL_MouseMotionEvent event);
@@ -166,10 +129,6 @@ protected:
 
 	vec2 m_mousePos = vec2(0.f, 0.f);
 
-	bool m_attackDelete = false;
-	bool m_attackBegin = false;
-	float m_attackTimer = 0;
-	int activeATK = NULL;
 	unsigned endTrigger;
 	bool endGame = false;
 
@@ -178,7 +137,6 @@ protected:
 
 	ToneFire::FMODCore fmod{};
 	ToneFire::CoreSound Sound{ "Michael Wyckoff - Analog Sunrise (Boneworks OST).mp3" , FMOD_2D || FMOD_LOOP_NORMAL };
-
 
 	std::string m_fileInput;
 

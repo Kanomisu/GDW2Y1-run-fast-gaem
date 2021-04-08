@@ -139,7 +139,6 @@
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSpritePlayground.h" />
     <ClInclude Include="AnimationSystem.h" />
-    <ClInclude Include="Attack.h" />
     <ClInclude Include="BackEnd.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="BloomEffect.h" />
@@ -209,7 +208,6 @@
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSpritePlayground.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
-    <ClCompile Include="Attack.cpp" />
     <ClCompile Include="BackEnd.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="BloomEffect.cpp" />

@@ -35,7 +35,7 @@ void EndScreen::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
 	}
 
-	CreateBoxEntity("end.png", 576, 325, 0, 0, 0, 2);
+	CreateBoxEntity("end.png", 576, 325, 0, 0, false);
 
 	//Tone Fire !!!!!!!!!!!!!!!!
 	Sound.Play();

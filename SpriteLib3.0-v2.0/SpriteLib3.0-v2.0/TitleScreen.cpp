@@ -38,7 +38,7 @@ void TitleScreen::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
 	}
 
-	CreateBoxEntity("TitleScreen.png", 576, 325, 0, 0, 0, 2);
+	CreateBoxEntity("TitleScreen.png", 576, 325, 0, 0, false);
 	CreateDecoration("start.png", 75.f, 49.875, -135.f, 0.f, 3.f);
 	CreateDecoration("credits.png", 75.f, 49.875, -135.f, -49.875, 3.f);
 	CreateDecoration("exit.png", 75.f, 49.875, -135.f, -99.75, 3.f);
