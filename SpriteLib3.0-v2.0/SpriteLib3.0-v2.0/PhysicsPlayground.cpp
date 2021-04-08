@@ -14,8 +14,6 @@ int playerY = 0;
 b2Vec2 respawnLocation = b2Vec2(-3700.f, -80.f);
 
 b2Vec2 activeProjDir;
-b2Vec2 attackPath;
-
 
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
@@ -172,60 +170,11 @@ void PhysicsPlayground::UpdateRope()
 
 }
 
-int PhysicsPlayground::Attack()
-{
-	//pre-existing hitbox
-	if (activeATK != NULL)
-	{
-		PhysicsBody::m_bodiesToDelete.push_back(activeATK);
-	}
-
-	//Creates entity
-	auto entity = ECS::CreateEntity();
-
-	//Add components
-	ECS::AttachComponent<Sprite>(entity);
-	ECS::AttachComponent<Transform>(entity);
-	ECS::AttachComponent<PhysicsBody>(entity);
-	
-	//Sets up the components
-	std::string fileName = "boxSprite.jpg";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
-	ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-	float pX = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionX();
-	float pY = ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPositionY();
-	ECS::GetComponent<Transform>(entity).SetPosition(vec3(pX, pY, 10)); //infront of player
-
-	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-	float shrinkX = 0.f;
-	float shrinkY = 0.f;
-
-	b2Body* tempBody;
-	b2BodyDef tempDef;
-	tempDef.type = b2_dynamicBody;
-	tempDef.position.Set(float32(pX), float32(pY));
-
-	tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, TRIGGER, ENEMY, 0.3f); //kill da enemy
-	
-	tempPhsBody.SetGravityScale(0.f);
-	attackPath = b2Vec2(0, -4); //basic cut downwards linearly for now, approx last 12
-	ECS::GetComponent<PhysicsBody>(entity).GetBody()->SetLinearVelocity(attackPath);
-	activeATK = entity;
-
-	ECS::GetComponent<Player>(MainEntities::MainPlayer()).reattachBody();
-
-	return entity;
-}
-
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
 	m_sceneReg = new entt::registry;
-
+	//m_physicsWorld = new b2World(m_gravity);
 	//Attach the register
 	ECS::AttachRegister(m_sceneReg);
 
@@ -370,40 +319,45 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180); //
 
 	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
+	
 	//BEGINNING\\
 
-	CreateBoxEntity("boxSprite.jpg", 128, 32, -2240.f, 234.f);
+	CreateBoxEntity("boxSprite.jpg", 128, 32, -2240.f, 234.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, -2096.f, 327.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, -2096.f, 327.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 192, 32, -1503.f, 646.f);
+	CreateBoxEntity("boxSprite.jpg", 192, 32, -1503.f, 646.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 192, 32, -224.f, -312.f);
+	CreateBoxEntity("boxSprite.jpg", 192, 32, -224.f, -312.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 160, 32, 112.f, -246.f);
+	CreateBoxEntity("boxSprite.jpg", 160, 32, 112.f, -246.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, 1518.f, -183.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 1518.f, -183.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, 1968.f, -217.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 1968.f, -217.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, 2637.f, -286.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 2637.f, -286.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 224, 32, 2830.f, -444.f);
+	CreateBoxEntity("boxSprite.jpg", 224, 32, 2830.f, -444.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, 3056.f, -408.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 3056.f, -408.f, true);
 
 
 	//PART 2\\
 
-	CreateBoxEntity("boxSprite.jpg", 64, 32, 4352.f, -440.f); //gay ass
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4353.f, -440.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 96, 32, 4591.f, -407.f);
+	CreateBoxEntity("boxSprite.jpg", 96, 32, 4591.f, -407.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 64, 32, 4800.f, -471.f);
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 4800.f, -471.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 128, 32, 5025.f, -406.f);
+	CreateBoxEntity("boxSprite.jpg", 128, 32, 5025.f, -406.f, true);
 
-	CreateBoxEntity("boxSprite.jpg", 64, 32, 6111.f, 73.f);
+	CreateBoxEntity("boxSprite.jpg", 64, 32, 6111.f, 73.f, true);
+
+	//End Barrier
+
+	CreateBoxEntity("boxSprite.jpg", 10, 10000, 6900.f, 75.f, true);
 
 
 	//Map entity - bottom
@@ -457,15 +411,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Vec2(-2080, -231), b2Vec2(-2080, -357), b2Vec2(-3807, -357)
 		};
 
-
-
-
 		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
 
 		tempPhsBody.SetRotationAngleDeg(0.f);
 		tempPhsBody.SetFixedRotation(true);
 
 	}
+
 	//Map entity - top
 	{
 		auto entity = ECS::CreateEntity();
@@ -503,8 +455,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Vec2(417, 854), b2Vec2(417, 918), b2Vec2(161, 918), b2Vec2(161, 949), b2Vec2(35, 949),
 		b2Vec2(35, 923)
 		};
-
-
 
 		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
 
@@ -564,16 +514,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Vec2(3618, -840)
 		};
 
-
-
 		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
 
 		tempPhsBody.SetRotationAngleDeg(0.f);
 		tempPhsBody.SetFixedRotation(true);
 
 	}
-
-
 
 	//Map entity PT 2 - Top
 	{
@@ -607,9 +553,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Vec2(5730, -104), b2Vec2(5730, 281), b2Vec2(6210, 281), b2Vec2(6210, 216), b2Vec2(6401, 216),
 		b2Vec2(6401, 310), b2Vec2(5696, 310), b2Vec2(5696, 218), b2Vec2(5410, 218)
 		};
-
-
-
 
 		tempPhsBody = PhysicsBody(entity, tempBody, points, false, GROUND, PLAYER | ENEMY | OBJECTS | HOOK);
 
@@ -675,6 +618,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		playerRef = entity;
 	}
 	
+	endTrigger = CreateEndTrigger(true, "boxSprite.jpg", 10.f, 10000.f, 6790.f, 75.f, 3.f, 6790.f, 75.f);
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -683,6 +627,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	ECS::GetComponent<Background>(background).attachSprite(&ECS::GetComponent<Sprite>(background));
 	*/
 
+	Sound.Play();
+	Sound.SetVolume(0.1);
 }
  
 
@@ -692,9 +638,11 @@ void PhysicsPlayground::Update()
 	auto& player = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
-
 	ECS::GetComponent<Background>(background).update();
 	ECS::GetComponent<Health>(healthHUD).update();
+
+	fmod.Update();
+
 	if (activeHook != NULL)
 	{
 		ECS::GetComponent<Trigger*>(activeHook)->Update();
@@ -705,21 +653,25 @@ void PhysicsPlayground::Update()
 	}
 
 	//If the hook is in its "in flight" state, update its movement
-	
-	
-	
+
 	//hook update
 	queueDeleteHookCheck();
 	queueHookCheck();
 	//Scene::AdjustScrollOffset();
 
-	//attack update
-	deleteAtk();
-	startAtk();
-
 	for (int x = 0; x < this->enemyEnts.size(); x++) {
 		//ECS::GetComponent<Enemy>(this->zombieEnts.at(x)).AttachAnimation(&ECS::GetComponent<AnimationController>(zombieEnts[x]));
 		ECS::GetComponent<Enemy>(this->enemyEnts.at(x)).Update();
+	}
+
+	int change = ((EndTrigger*)(ECS::GetComponent<Trigger*>(endTrigger)))->returnInt();
+	((EndTrigger*)(ECS::GetComponent<Trigger*>(endTrigger)))->OnUpdate();
+	
+	///std::cout << change;
+	if (change != -1)
+	{
+		sceneNum = 4;
+		Sound.Mute();
 	}
 }
 
@@ -916,9 +868,8 @@ void PhysicsPlayground::KeyboardDown()
 
 void PhysicsPlayground::KeyboardUp()
 {
+
 }
-
-
 
 void PhysicsPlayground::GUI()
 {

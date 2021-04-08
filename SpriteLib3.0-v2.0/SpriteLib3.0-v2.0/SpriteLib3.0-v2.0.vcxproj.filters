@@ -4,7 +4,6 @@
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSpritePlayground.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
-    <ClCompile Include="Attack.cpp" />
     <ClCompile Include="BackEnd.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
@@ -68,12 +67,13 @@
     <ClCompile Include="AnimObject.cpp" />
     <ClCompile Include="checkpointTrigger.cpp" />
     <ClCompile Include="DeathTrigger.cpp" />
+    <ClCompile Include="EndTrigger.cpp" />
+    <ClCompile Include="EndScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSpritePlayground.h" />
     <ClInclude Include="AnimationSystem.h" />
-    <ClInclude Include="Attack.h" />
     <ClInclude Include="BackEnd.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="BloomEffect.h" />
@@ -139,5 +139,8 @@
     <ClInclude Include="AnimObject.h" />
     <ClInclude Include="checkpointTrigger.h" />
     <ClInclude Include="DeathTrigger.h" />
+    <ClInclude Include="include\ToneFire\ToneFire.h" />
+    <ClInclude Include="EndTrigger.h" />
+    <ClInclude Include="EndScreen.h" />
   </ItemGroup>
 </Project>

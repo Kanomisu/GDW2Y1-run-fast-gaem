@@ -147,7 +147,7 @@ void Scene::CreateCameraEntity(bool mainCamera, float windowWidth, float windowH
 		}
 	}
 }
-void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int rotDeg, int vecZ, bool isDynamic, float shrinkXValue, float shrinkYValue)
+void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int vecX, int vecY, bool invis, int rotDeg, int vecZ, bool isDynamic, float shrinkXValue, float shrinkYValue)
 {
 	//Creates entity
 	auto entity = ECS::CreateEntity();
@@ -159,6 +159,10 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 
 	//Sets up components
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, spriteX, spriteY);
+	if (invis)
+	{
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	}
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(vecX, vecY, vecZ));
 
 	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -183,6 +187,45 @@ void Scene::CreateBoxEntity(std::string fileName, int spriteX, int spriteY, int 
 
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotDeg);
+}
+
+unsigned Scene::CreateEndTrigger(bool invisible, std::string fileName, int spriteX, int spriteY, int vecX, int vecY, int vecZ, int posX, int posY)
+{
+	///Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+	//Sets up components
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, spriteX, spriteY);
+	if (invisible)
+	{
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+	}
+
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(vecX, vecY, vecZ));
+	ECS::GetComponent<Trigger*>(entity) = new EndTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(posX), float32(posY));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	return entity;
 }
 
 entt::registry* Scene::GetScene() const
