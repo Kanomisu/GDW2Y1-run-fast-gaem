@@ -55,7 +55,7 @@ public:
 
 		//ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 64, 64);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(spawnX, spawnY, 2.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(spawnX, spawnY, 10.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);

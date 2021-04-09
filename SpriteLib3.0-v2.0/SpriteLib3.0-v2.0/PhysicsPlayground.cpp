@@ -331,7 +331,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateDecoration("Mouse_clicked.png", 32, 32, -1800, 540, 2);
 
 	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180);
-	CreateDecoration("arrow.png", 24, 24, -488, 733, 2, -4.7f);//
+	CreateDecoration("arrow.png", 24, 24, -488, 733, 2, -4.7f);
 
 	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
 
@@ -365,6 +365,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateBoxEntity("boxSprite.jpg", 224, 32, 2830.f, -444.f, true);
 
 	CreateBoxEntity("boxSprite.jpg", 96, 32, 3056.f, -408.f, true);
+
+	CreateBoxEntity("boxSprite.jpg", 30, 500, -462.f, 1042.f, true);
 
 
 	//PART 2\\
@@ -488,11 +490,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 	//SpawnEnemy(-3600, -80, -3680, -3720);
 	
-	makeCheckpoint(b2Vec2(-1135, 525));
-	makeCheckpoint(b2Vec2(-620, -280));
-	makeCheckpoint(b2Vec2(501, -190));
-	makeCheckpoint(b2Vec2(3400, -345));
-	makeCheckpoint(b2Vec2(5570, -280));
+	makeCheckpoint(b2Vec2(-1135, 546));
+	makeCheckpoint(b2Vec2(-620, -252));
+	makeCheckpoint(b2Vec2(501, -155));
+	makeCheckpoint(b2Vec2(3400, -318));
+	makeCheckpoint(b2Vec2(5570, -252));
 
 		
 	
@@ -599,6 +601,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		SpawnEnemy(-145, -250, -305, -145);
 		SpawnEnemy(1460, -138, 1460, 1580);
 		SpawnEnemy(2400, -405, 2400, 2570);
+		SpawnEnemy(5744, -70, 5744, 6160);
+		//SpawnEnemy(6150, 25, 6150, 5997);
 	}
 	//Player entity
 	{
@@ -776,8 +780,8 @@ int PhysicsPlayground::makeCheckpoint(b2Vec2 location)
 
 	//Sets up components
 	std::string fileName = "Checkpoint.png";
-	float fileX = 25;
-	float fileY = 50;
+	float fileX = 44;
+	float fileY = 88;
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileX, fileY);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(location.x, location.y, 4.f));
 
