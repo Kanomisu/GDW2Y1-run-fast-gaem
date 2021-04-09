@@ -273,7 +273,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	
 	
 	{
-		
 		//Creates entity
 		auto entity = ECS::CreateEntity();
 
@@ -331,7 +330,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	CreateDecoration("Mouse_no_click.png", 32, 32, -1830, 540, 2);
 	CreateDecoration("Mouse_clicked.png", 32, 32, -1800, 540, 2);
 
-	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180); //
+	CreateDecoration("arrow.png", 24, 24, -1750, 540, 2, 180);
+	CreateDecoration("arrow.png", 24, 24, -488, 733, 2, -4.7f);//
 
 	CreateDecoration("cursor.png", 24, 24, -1650, 580, 2);
 
@@ -880,10 +880,10 @@ void PhysicsPlayground::KeyboardDown()
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 
-	if (Input::GetKeyDown(Key::T))
-	{
-		PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
-	}
+	//if (Input::GetKeyDown(Key::T))
+	//{
+		//PhysicsBody::SetDraw(!PhysicsBody::GetDraw());
+	//}
 	if (Input::GetKeyDown(Key::R))
 	{
 		respawnPlayer();
