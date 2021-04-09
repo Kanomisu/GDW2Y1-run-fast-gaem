@@ -178,7 +178,7 @@ void Player::MovementUpdate()
 			if (Input::GetKeyDown(Key::Space) && m_canJump->m_canJump)
 			{
 				time = maxJumpTime;
-				std::cout << "maxJumpTime";
+				//std::cout << "maxJumpTime";
 				m_canJump->m_canJump = false;
 			}
 			if (time > 0)
@@ -376,7 +376,7 @@ void Player::SetActiveAnimation(int anim)
 
 void Player::kill()
 {
-	std::cout << "Dead Bruh" << std::endl;
+	//std::cout << "Dead Bruh" << std::endl;
 }
 
 int Player::GetHealth()

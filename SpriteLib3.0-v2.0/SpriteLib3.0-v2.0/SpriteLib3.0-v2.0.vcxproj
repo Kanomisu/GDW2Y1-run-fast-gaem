@@ -70,7 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>Project Flow</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -184,6 +186,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RenderingSystem.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scenes.h" />
     <ClInclude Include="Selectable.h" />
@@ -277,6 +280,14 @@
     <ClCompile Include="VignetteEffect.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="XInput.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SpriteLib3.0-v2.0.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Haide\Desktop\Untitle2d-3.png" />
+    <Image Include="C:\Users\Haide\Desktop\Untitled-2.png" />
+    <Image Include="C:\Users\Haide\Desktop\Untitled-3.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

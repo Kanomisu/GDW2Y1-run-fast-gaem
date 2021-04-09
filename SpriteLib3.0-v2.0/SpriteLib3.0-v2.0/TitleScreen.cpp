@@ -154,7 +154,7 @@ void TitleScreen::Update()
 	/*
 	float dx = m_mousePos.x;
 	float dy = m_mousePos.y;
-	std::cout << "X: " << dx << "   Y: " << dy << std::endl;
+	//std::cout << "X: " << dx << "   Y: " << dy << std::endl;
 	*/
 }
 
@@ -170,7 +170,7 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -165.f && dx <= -105.f) && (dy >= -10 && dy <= 10))
 		{
 			//Select.Play();
-			std::cout << "Starting game!" << std::endl;
+			//std::cout << "Starting game!" << std::endl;
 			timer = 1.f;
 			menu = false;
 			play = true;
@@ -178,7 +178,7 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -170.f && dx <= -100.f) && (dy >= -60 && dy <= -40))
 		{
 			//Select.Play();
-			std::cout << "Credits!" << std::endl;
+			//std::cout << "Credits!" << std::endl;
 			menu = false;
 			displayCredits = true;
 			inputCredits = true;
@@ -186,7 +186,7 @@ void TitleScreen::MouseClick(SDL_MouseButtonEvent evnt)
 		if (ImGui::GetIO().MouseDown[1] && (dx >= -155.f && dx <= -95.f) && (dy >= -110 && dy <= -90))
 		{
 			//Select.Play();
-			std::cout << "Thank you for playing!" << std::endl;
+			//std::cout << "Thank you for playing!" << std::endl;
 			exit(0);
 		}
 	}

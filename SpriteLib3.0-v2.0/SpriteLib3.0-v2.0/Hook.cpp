@@ -38,7 +38,7 @@ void Hook::OnTrigger()
 void Hook::OnEnter()
 {
 	Trigger::OnEnter();
-	std::cout << "Hook attached\n";
+	//std::cout << "Hook attached\n";
 	attached = true;
 }
 

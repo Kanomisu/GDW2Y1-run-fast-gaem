@@ -838,7 +838,7 @@ void PhysicsPlayground::PrintMouseLocation(vec2 mousePos)
 	float dx = -1*(playerPos.x - mouseGL.x);
 	float dy = -1*(playerPos.y - mouseGL.y);
 
-	std::cout << "X: " << dx << "\tY: " << dy << "\n";
+	//std::cout << "X: " << dx << "\tY: " << dy << "\n";
 }
 
 vec2 PhysicsPlayground::GetMouseLocation()
@@ -900,7 +900,7 @@ void PhysicsPlayground::KeyboardDown()
 	*/
 	if (Input::GetKeyDown(Key::K))
 	{
-		std::cout << GetMouseLocation().x << "      " << GetMouseLocation().y << std::endl;
+		//std::cout << GetMouseLocation().x << "      " << GetMouseLocation().y << std::endl;
 	}
 }
 

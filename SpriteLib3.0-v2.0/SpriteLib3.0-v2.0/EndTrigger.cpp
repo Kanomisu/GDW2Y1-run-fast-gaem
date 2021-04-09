@@ -31,7 +31,7 @@ void EndTrigger::OnUpdate()
 		if (timer <= 0)
 		{
 			timer = 0;
-			std::cout << "activated";
+			//std::cout << "activated";
 			endGame = 1;
 		}
 	}

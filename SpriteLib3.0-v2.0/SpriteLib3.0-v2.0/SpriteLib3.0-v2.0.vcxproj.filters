@@ -142,5 +142,14 @@
     <ClInclude Include="include\ToneFire\ToneFire.h" />
     <ClInclude Include="EndTrigger.h" />
     <ClInclude Include="EndScreen.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SpriteLib3.0-v2.0.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Haide\Desktop\Untitled-2.png" />
+    <Image Include="C:\Users\Haide\Desktop\Untitled-3.png" />
+    <Image Include="C:\Users\Haide\Desktop\Untitle2d-3.png" />
   </ItemGroup>
 </Project>
